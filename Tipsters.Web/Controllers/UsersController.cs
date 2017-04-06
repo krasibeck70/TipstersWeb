@@ -1,5 +1,9 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
@@ -9,6 +13,7 @@ using Tipsters.Data;
 using Tipsters.Data.Interfaces;
 using Tipsters.Models.Models;
 using Tipsters.Services;
+using FacebookEasyAccess.Interfaces;
 
 namespace Tipsters.Web.Controllers
 {

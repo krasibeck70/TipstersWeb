@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Facebook;
 using Owin;
 using Tipsters.Models.Models;
 using Tipsters.Data;
@@ -57,6 +58,16 @@ namespace Tipsters.Web
             app.UseFacebookAuthentication(
                appId: "1398755243515118",
                appSecret: "5ed6f3203d8b59a736c95e3de059dfa9");
+
+            //var x = new FacebookAuthenticationOptions();
+            //x.AppId = "1398755243515118";
+            //x.AppSecret = "5ed6f3203d8b59a736c95e3de059dfa9";
+            //x.Scope.Add("email");
+            //x.Scope.Add("public_profile");
+            ////x.Scope.Add("picture");
+            ////x.Scope.Add("user_birthday");
+            //app.UseFacebookAuthentication(x);
+
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{

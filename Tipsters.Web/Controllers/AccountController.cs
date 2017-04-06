@@ -338,7 +338,9 @@ namespace Tipsters.Web.Controllers
             }
 
             // Sign in the user with this external login provider if the user already has a login
+            //var firstNameClaim = loginInfo.ExternalIdentity.Claims.First(c => c.Type == "urn:facebook:first_name");
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            
             switch (result)
             {
                 case SignInStatus.Success:
@@ -372,11 +374,12 @@ namespace Tipsters.Web.Controllers
             {
                 // Get the information about the user from the external login provider
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                
                 if (info == null)
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, BirthDate = model.Birthdate};
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, BirthDate = model.Birthdate, FullName = info.DefaultUserName};
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
