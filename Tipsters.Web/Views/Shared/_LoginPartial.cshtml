@@ -1,0 +1,14 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+
+        <li><a href="@Url.Action("Profile", "Users", new {id = @User.Identity.GetUserId()})"><strong>@User.Identity.GetUserName()</strong></a></li>
+        <li><a href="@Url.Action("LogOff","Account")"><strong>Logout</strong></a></li>
+}
+else
+{
+        <li><a href="@Url.Action("Register", "Account")"><strong>Register</strong></a></li>
+        <li><a href="@Url.Action("Login", "Account")"><strong>Login</strong></a></li>
+}
+
+

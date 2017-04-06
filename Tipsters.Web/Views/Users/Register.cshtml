@@ -1,0 +1,119 @@
+﻿@section Scripts
+{
+    <script>
+        $("#datetimepicker").datetimepicker({
+            format: 'MM-DD-YYYY 00:00:00'
+        });
+        $.extend("#datetimepicker", { _checkOffset: function (inst, offset, isFixed) { return offset } });
+    </script>
+}
+@{
+    ViewBag.Title = "Register";
+}
+
+<main class="col-4 offset-4 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="col-12">
+                    <div class="text-center">
+                        <h1 class="display-3">Register</h1>
+                    </div>
+                    <br />
+                    <form method="POST" id="login-form" autocomplete="off">
+                        
+                        <div class="form-group row">
+                            <label for="username" class="sr-only">Username</label>
+                            <input type="text" id="username" name="Username" class="form-control" placeholder="Username" />
+                            @if (ViewData.ModelState.ContainsKey("CustomUsername"))
+                            {
+                                <span class="field-validation-error label-danger pull-left">
+                                    @ViewData.ModelState["CustomUsername"].Errors[0].ErrorMessage
+                                </span>
+                            }
+                            else if (ViewData.ModelState.ContainsKey("CustomUsernameExist"))
+                            {
+                                <span class="field-validation-error label-danger pull-left">
+                                    @ViewData.ModelState["CustomUsernameExist"].Errors[0].ErrorMessage
+                                </span>
+                            }
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label for="email" class="sr-only">Email</label>
+                            <input type="email" id="email" name="Email" class="form-control" placeholder="somebody@example.com" />
+                            @if (ViewData.ModelState.ContainsKey("CustomEmail"))
+                            {
+                                <span class="field-validation-error label-danger pull-left">
+                                    @ViewData.ModelState["CustomEmail"].Errors[0].ErrorMessage
+                                </span>
+                            }
+                            else if (ViewData.ModelState.ContainsKey("CustomEmailExist"))
+                            {
+                                <span class="field-validation-error label-danger pull-left">
+                                    @ViewData.ModelState["CustomEmailExist"].Errors[0].ErrorMessage
+                                </span>
+                            }
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="name" class="sr-only">Full Name</label>
+                            <input type="text" id="name" name="FullName" pattern="^[a-zA-Z -.]+$" class="form-control" placeholder="Full Name" />
+                            @if (ViewData.ModelState.ContainsKey("CustomFullName"))
+                            {
+                                <span class="field-validation-error label-danger pull-left">
+                                    @ViewData.ModelState["CustomFullName"].Errors[0].ErrorMessage
+                                </span>
+                            }
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label for="birthdate" class="sr-only">Birthdate</label>
+                            <div class="input-group date " id="datetimepicker">
+                                <input type="datetime" name="BirthDate" class="form-control" placeholder="Birthdate" style="color: black" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                            @if (ViewData.ModelState.ContainsKey("CustomBirthdate"))
+                            {
+                                <span class="field-validation-error label-danger pull-left">
+                                    @ViewData.ModelState["CustomBirthdate"].Errors[0].ErrorMessage
+                                </span>
+                            }
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="key" class="sr-only">Password</label>
+                            <input type="password" name="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" id="key" class="form-control" placeholder="Password" />
+                            @if (ViewData.ModelState.ContainsKey("CustomPassword"))
+                            {
+                                <span class="field-validation-error label-danger pull-left">
+                                    @ViewData.ModelState["CustomPassword"].Errors[0].ErrorMessage
+                                </span>
+                            }
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="confirm-key" class="sr-only">Confirm Password</label>
+                            <input type="password" name="ConfirmPassword" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" id="confirm-key" class="form-control"
+                                   placeholder="Confirm Password" />
+                            @if (ViewData.ModelState.ContainsKey("CustomPassword"))
+                            {
+                                <span class="field-validation-error label-danger pull-left">
+                                    @ViewData.ModelState["CustomPassword"].Errors[0].ErrorMessage
+                                </span>
+                            }
+                        </div>
+                        <div class="col-lg-offset-3 col-lg-6">
+                            <input type="submit" id="btn-login" class="btn btn-success btn-lg btn-block" value="Register" />
+                        </div>
+
+                    </form>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+

@@ -1,0 +1,85 @@
+﻿@using System.Web.UI.WebControls
+@model Tipsters.Models.ViewModels.AccountViewModel.RegisterViewModel
+@section Scripts
+{
+<script src="~/Scripts/register.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+}
+@section Styles{
+    <link href=@Url.Content("~/Content/bootstrap-datepicker.min.css") rel="stylesheet" />
+}
+@{
+    ViewBag.Title = "Register";
+    
+}
+
+<main class="col-4 offset-4 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="col-12">
+                    <div class="text-center">
+                        <h1 class="display-3">Register</h1>
+                    </div>
+                    <br />
+                    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken();
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group row">
+                            <div class="input-group">
+                                @Html.LabelFor(m => m.Email, new { @class = "sr-only" })
+                                @Html.TextBoxFor(m => m.Email, new { id = "Email_js", @class = "form-control", placeholder = "somebody@example.com" })
+                                <span class="input-group-addon ">
+                                    <span class="glyphicon glyphicon-ok" id="message3"></span>
+                                </span>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group row">
+                            @Html.LabelFor(m => m.FullName, new { @class = "sr-only" })
+                            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", placeholder = "Full Name" })
+                            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group row">
+                                @Html.LabelFor(m => m.Birthdate, new { @class = "sr-only" })
+                            <div class="input-group date " id="datetimepicker">
+                                @Html.TextBoxFor(m => m.Birthdate, new { @class = "form-control", placeholder = "Birthdate", autocomplete = "off" })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Birthdate, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group row">
+                            <div class="input-group">
+                                @Html.LabelFor(m => m.Password, new { @class = "sr-only" })
+                                @Html.PasswordFor(m => m.Password, new { id = "Password_js", @class = "form-control", placeholder = "Password" })
+                                <span class="input-group-addon ">
+                                    <span class="glyphicon glyphicon-ok" id="message2"></span>
+                                </span>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group row">
+                            <div class="input-group">
+                                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "sr-only" })
+                                @Html.PasswordFor(m => m.ConfirmPassword, new { id = "ConfirmPassword_js", @class = "form-control", placeholder = "ConfirmPassword" })
+                                <span class="input-group-addon ">
+                                    <span class="glyphicon glyphicon-ok" id="message"></span>
+                                </span>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-lg-offset-3 col-lg-6">
+                            <input type="submit" id="btn-login" class="btn btn-success btn-lg btn-block" value="Register" />
+                        </div>
+                    }
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+

@@ -1,0 +1,74 @@
+﻿@using System.Web.UI.WebControls
+@using Tipsters.Models.ViewModels.AccountViewModel
+@model Tipsters.Models.ViewModels.AccountViewModel.LoginViewModel
+
+@{
+    ViewBag.Title = "Log in";
+}
+<style>
+    .btn span.glyphicon {
+        opacity: 0;
+    }
+
+    .btn.active span.glyphicon {
+        opacity: 1;
+    }
+</style>
+<main class="col-2 offset-4 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="jumbotron">
+                <div class="col-6">
+                    <div class="text-center">
+                        <h1 class="display-3">Login</h1>
+                    </div>
+                    <br />
+                    <div>
+                        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group row">
+                                <div class="input-group">
+                                    @Html.LabelFor(m => m.Email, new { @class = "sr-only" })
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "samobody@example.com" })
+                                    <span class="input-group-addon ">
+                                        <span class="glyphicon glyphicon-ok" id="message3"></span>
+                                    </span>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group row">
+                                <label for="key" class="sr-only">Password</label>
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-success active">
+                                        <input type="checkbox" autocomplete="off" checked>
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                        <span>Remember me</span>
+                                    </label>
+                                </div>
+                            </div>
+                            @*<div class="col-lg-offset-3 col-lg-6">*@
+                                <input type="submit" id="btn-login" class="btn btn-success btn-lg" style="margin-right: 140px" value="&nbsp; &nbsp; Login &nbsp; &nbsp;" />
+                               
+                            @*</div>*@
+                        }
+                        @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                    </div>
+                    
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<br />
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

@@ -1,0 +1,35 @@
+﻿.form-area
+{
+    /*background-color: #FAFAFA;*/
+	padding: 10px 40px 60px;
+	margin: 10px 0px 60px;
+	/*border: 1px solid GREY;*/
+	}
+.jumbotron{
+	margin-left: 20%;
+	margin-right: 20%;
+    background-color: beige;
+}
+#PostTips{
+	text-align: center;
+	margin-top: -5%;
+	
+}
+#StartMacth{
+	width: 2.3in;
+	height: 0.35in;
+}
+
+input::-webkit-input-placeholder {
+color: white !important;
+}
+#chance{
+    width: 2.3in;
+	height: 0.35in;
+    margin-top: -6%;
+}
+#datetimepicker {
+    width: 2.3in;
+    height: 0.35in;
+    position: relative;
+}

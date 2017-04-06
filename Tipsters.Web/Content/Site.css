@@ -1,0 +1,27 @@
+﻿/*@import url('Css/navbar.css');
+@import url('Css/postPronostics.css');
+@import url('Css/Profile.css');
+@import url('Css/Tipsters.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/css/bootstrap-select.min.css');
+@import url('//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css');
+@import url('bootstrap-datetimepicker.min.css');
+@import url('normalize.css');
+@import url('Css/tips.css');*/
+
+body {
+    background: url('Images/background.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.field-validation-error {
+    color: red;
+}
+.field-validation-valid {
+    color: red;
+}
+input[type="date"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
