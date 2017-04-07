@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -19,6 +20,7 @@ namespace Tipsters.Models.Models
 
         public string FirstUsername { get; set; }
         public string FullName { get; set; }
+        [DataType(DataType.Date)]
         public DateTime? BirthDate { get; set; }
         public string Image { get; set; }
         public string ImageBackground { get; set; }

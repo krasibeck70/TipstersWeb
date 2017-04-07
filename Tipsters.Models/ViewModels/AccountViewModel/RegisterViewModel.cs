@@ -27,8 +27,8 @@ namespace Tipsters.Models.ViewModels.AccountViewModel
 
         public string FullName { get; set; }
 
-        [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString="{dd/mm/yyyy}")]
+        [DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString="{dd/mm/yyyy}")]
         public DateTime Birthdate { get; set; }
         
     }

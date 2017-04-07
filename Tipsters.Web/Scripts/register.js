@@ -1,5 +1,12 @@
 ﻿$("#datetimepicker").datepicker({
-    format: 'mm-dd-yyyy'
+    format: "yyyy/mm/dd",
+    showStatus: true,
+    showWeeks: true,
+    currentText: 'Now',
+    autoSize: true,
+    gotoCurrent: true,
+    showAnim: 'blind',
+    highlightWeek: true
 });
 
 $('#Email_js').on('keyup',

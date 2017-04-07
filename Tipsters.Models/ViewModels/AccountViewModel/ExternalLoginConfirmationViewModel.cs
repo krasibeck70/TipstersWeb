@@ -13,6 +13,7 @@ namespace Tipsters.Models.ViewModels.AccountViewModel
         [Display(Name = "Email")]
         public string Email { get; set; }
         [Required]
+        [DataType(DataType.Date)]
         [Display(Name = "Birthdate")]
         public DateTime? Birthdate { get; set; }
     }
