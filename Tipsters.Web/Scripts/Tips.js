@@ -4,6 +4,7 @@ $('.btn-vote').click(function () {
     var tip_id_button = "";
     var url = "/Tips/VotesTips/";
     var parameter = "";
+    
     if ($(this).hasClass('Up')) {
 
         tip_id_button = this.id;
@@ -19,14 +20,19 @@ $('.btn-vote').click(function () {
         dataType: "json",
         url: url + tip_id + "¿" + parameter,
         success: function (data) {
+            console.log(tip_id);
             var result = JSON.parse(data);
             if (parameter === "Up") {
-                document.getElementById(tip_id_button).innerHTML = "&nbsp;" + result["VotesUp_json"];
+                document.getElementById(tip_id_button).innerHTML = "&nbsp;&nbsp;" + result["VotesUp_json"];
             } else {
                 if (parameter === "Down") {
-                    document.getElementById(tip_id_button).innerHTML = "&nbsp;" + result["VotesDown_json"];
+                    document.getElementById(tip_id_button).innerHTML = "&nbsp;&nbsp;" + result["VotesDown_json"];
                 }
             }
+            $("#button_up_ajax-" + tip_id).addClass("disabled");
+            $("#button_down_ajax-" + tip_id).addClass("disabled");
+            $("#button_up_ajax-" + tip_id).removeClass("Up").removeClass("btn-vote").removeAttr("id").removeAttr("data-tip").removeAttr("data-val").removeAttr("type");
+            $("#button_down_ajax-" + tip_id).removeClass("Down").removeClass("btn-vote").removeAttr("id").removeAttr("data-tip").removeAttr("data-val2").removeAttr("type");
             $("progress_bar_" + tip_id).on(function () {
                 $(this).attr('aria-valuenow').val = result["Percentage"];
             });

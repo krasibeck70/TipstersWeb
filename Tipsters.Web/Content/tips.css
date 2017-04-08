@@ -41,3 +41,8 @@ span {
         border-right-color: #ddd;
         border-width: 8px;
     }
+.disabled {
+    border: 1px solid;
+    background-color: green;
+    color: greenyellow;
+}

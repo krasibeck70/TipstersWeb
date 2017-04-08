@@ -13,34 +13,39 @@
 <div class="jumbotron">
     <h2>@ViewBag.Title.</h2>
     <h3>Associate your @ViewBag.LoginProvider account.</h3>
-    @using (Html.BeginForm("ExternalLoginConfirmation", "Account", new {ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+    @using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
 
-        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <p class="text-success">
             You've successfully authenticated with <strong>@ViewBag.LoginProvider</strong>.
             Please enter a user name for this site below and click the Register button to finish
             logging in.
         </p>
         <div class="form-group">
-            @Html.LabelFor(m => m.Email, new {@class = "sr-only"})
-            @Html.TextBoxFor(m => m.Email, new {@class = "form-control", placeholder = "Email"})
-            @Html.ValidationMessageFor(m => m.Email, "", new {@class = "text-danger"})
-        </div>
-        <div class="form-group row">
-            @Html.LabelFor(m => m.Birthdate, new {@class = "sr-only"})
-            <div class="input-group date " id="datetimepicker">
-                @Html.TextBoxFor(m => m.Birthdate, new {@class = "form-control", placeholder = "Birthdate", autocomplete = "off"})
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
+            <div class="input-group">
+                @Html.LabelFor(m => m.Email, new { @class = "sr-only" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", id = "Email_js" })
+                <span class="input-group-addon ">
+                    <span class="glyphicon glyphicon-ok" id="message3"></span>
                 </span>
             </div>
-            @Html.ValidationMessageFor(m => m.Birthdate, "", new {@class = "text-danger"})
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-0 col-md-10" style="margin-left: -15px">
-                <input type="submit" class="btn btn-default" value="Register"/>
+            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            <div class="form-group row">
+                @Html.LabelFor(m => m.Birthdate, new { @class = "sr-only" })
+                <div class="input-group date " id="datetimepicker">
+                    @Html.TextBoxFor(m => m.Birthdate, new { @class = "form-control", placeholder = "Birthdate", autocomplete = "off" })
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                @Html.ValidationMessageFor(m => m.Birthdate, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-0 col-md-10" style="margin-left: -15px">
+                    <input type="submit" class="btn btn-default" value="Register" />
+                </div>
             </div>
         </div>
     }

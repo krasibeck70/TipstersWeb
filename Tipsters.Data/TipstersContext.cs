@@ -56,6 +56,10 @@ namespace Tipsters.Data
                 .HasRequired(x => x.User)
                 .WithMany(x => x.CommentsPronostics)
                 .HasForeignKey(x => x.UserId);
+            modelBuilder.Entity<Pronostic>()
+                .HasMany(x => x.UsersLikes)
+                .WithMany(x => x.LikesPronostics)
+                .Map(x => x.ToTable("LikesPronostics").MapLeftKey("UserId").MapRightKey("PronosticId"));
         }
     }
 }

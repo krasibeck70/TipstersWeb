@@ -32,5 +32,7 @@ namespace Tipsters.Models.Models
         public virtual ICollection<Pronostic> OwnerPronostics { get; set; }
 
         public virtual ICollection<Comment> CommentsPronostics { get; set; }
+
+        public virtual ICollection<Pronostic> LikesPronostics { get; set; }
     }
 }

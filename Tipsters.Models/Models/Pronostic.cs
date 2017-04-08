@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tipsters.Models.Models
 {
@@ -36,6 +37,7 @@ namespace Tipsters.Models.Models
         }
 
         public virtual ICollection<Comment> OwnerComments { get; set; }
+        public virtual ICollection<ApplicationUser> UsersLikes { get; set; }
 
 
         public static string TimeAgo(DateTime dateTime)
@@ -104,6 +106,19 @@ namespace Tipsters.Models.Models
             }
 
             return percentage;
+        }
+
+        public bool ContainsUserId(ICollection<ApplicationUser> users, string id)
+        {
+            var usersId = users.Select(x => x.Id);
+            if (usersId.Contains(id))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

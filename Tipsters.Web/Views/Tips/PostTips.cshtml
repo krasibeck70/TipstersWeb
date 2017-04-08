@@ -1,10 +1,11 @@
 ﻿@using System.Threading
-@model Tuple<IEnumerable<Tipsters.Models.Models.County>,IEnumerable<Tipsters.Models.Models.Tip>>
+@model Tuple<IEnumerable<Tipsters.Models.Models.County>, IEnumerable<Tipsters.Models.Models.Tip>>
 @section Scripts
 {
+    <script src="~/Scripts/posttip.js"></script>
     <script>
-    $("#datetimepicker").datetimepicker({
-        format: "yyyy-mm-dd hh:ii:00"
+        $("#datetimepicker").datetimepicker({
+            format: "yyyy-mm-dd hh:ii:00"
         });
     </script>
 }
@@ -19,81 +20,260 @@
     ViewBag.Title = "PostTips";
 }
 
-
-@using (Html.BeginForm("PostTips", "Tips", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@*@using (Html.BeginForm("PostTips", "Tips", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div class="container">
 
-    <div class="jumbotron">
-        <h2 id="PostTips"> Post Tips </h2>
-        <br>
-        <select name="SelectHomeTeam" id="selectLocalTeam" class="selectpicker" data-style="btn-info" data-live-search="true">
-            <option>Home Team</option>
-            @foreach (var country in Model.Item1)
-            {
-                <option>
-                    @country.Name
-                @foreach (var league in country.Leagues)
-                {
-                    <optgroup label="@league.Name">
-                        @foreach (var team in league.Teams)
+            <div class="jumbotron">
+                <h2 id="PostTips"> Post Tips </h2>
+                <br>
+                <select name="SelectHomeTeam" id="selectLocalTeam" class="selectpicker" data-style="btn-info" data-live-search="true">
+                    <option>Home Team</option>
+                    @foreach (var country in Model.Item1)
+                    {
+                        <option>
+                            @country.Name
+                            @foreach (var league in country.Leagues)
+                            {
+                                <optgroup label="@league.Name">
+                                    @foreach (var team in league.Teams)
+                            {
+                                        <option>@team.Name</option>
+                                    }
+                                </optgroup>
+
+                            }
+                        </option>
+
+                    }
+                </select>
+
+                <select name="SelectAwayTeam" id="selectAwayTeam" class="selectpicker pull-right" data-style="btn-info" data-live-search="true">
+                    <option>Awat Team</option>
+                    @foreach (var country in Model.Item1)
+                    {
+
+                        foreach (var league in country.Leagues)
                         {
-                            <option>@team.Name</option>
+                            <optgroup label="@league.Name">
+                                @foreach (var team in league.Teams)
+                            {
+                                    <option>@team.Name</option>
+                                }
+                            </optgroup>
+
                         }
-                    </optgroup>
 
-                }
-            </option>
-
-                }
-        </select>
-
-        <select name="SelectAwayTeam" id="selectAwayTeam" class="selectpicker pull-right" data-style="btn-info" data-live-search="true">
-            <option>Awat Team</option>
-            @foreach (var country in Model.Item1)
-            {
-
-                foreach (var league in country.Leagues)
-                {
-                    <optgroup label="@league.Name">
-                        @foreach (var team in league.Teams)
-                        {
-                            <option>@team.Name</option>
-                        }
-                    </optgroup>
-
-                }
-
-            }
-        </select>
-        <br>
-        <br>
-        <select name="SelectTips" id="selectTip" class="selectpicker" data-style="btn-info" data-live-search="true">
-            <option>Type Of Tip</option>
-            @foreach (var tip in Model.Item2)
-            {
-                <option>@tip.Name</option>
-            }
-        </select>
-        <div class="input-group date pull-right " id="datetimepicker">
-            <input type="datetime" class="form-control label-info" name="StartMatch" placeholder="Start match" style="color: white"/>
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
+                    }
+                </select>
+                <br>
+                <br>
+                <select name="SelectTips" id="selectTip" class="selectpicker" data-style="btn-info" data-live-search="true">
+                    <option>Type Of Tip</option>
+                    @foreach (var tip in Model.Item2)
+                    {
+                        <option>@tip.Name</option>
+                    }
+                </select>
+                <div class="input-group date pull-right " id="datetimepicker">
+                    <input type="datetime" class="form-control label-info" name="StartMatch" placeholder="Start match" style="color: white" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                <br>
+                <br>
+                <div>
+                    <input id="StartMacth" class=" form-control btn-info" type="text" name="Koeficent" placeholder="Koeficent" value="">
+                    <input id="chance" class=" form-control btn-info pull-right" type="text" name="Chance" placeholder="Chance in %" value="">
+                </div>
+                <br>
+                <br>
+                <input type="submit" class="btn btn-group-lg btn-success pull-right" value="Post">
+            </div>
         </div>
-        <br>
-        <br>
-        <div>
-            <input id="StartMacth" class=" form-control btn-info" type="text" name="Koeficent" placeholder="Koeficent" value="">
-            <input id="chance" class=" form-control btn-info pull-right" type="text" name="Chance" placeholder="Chance in %" value="">
-        </div>
-        <br>
-        <br>
-        <input type="submit" class="btn btn-group-lg btn-success pull-right" value="Post">
-    </div>
-</div>
+
+    }*@
+
+
+<div id="wrapper">
+
+    @using (Html.BeginForm("PostTips", "Tips", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <main class="text-center">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="container">
+                        <div class="col-12">
+                            <div class="text-center">
+                                <h1 class="display-2">Post Tips</h1>
+                            </div>
+                            <br />
+                            <div class="col-lg-5">
+                                <select name="SelectHomeTeam" id="selectLocalTeam" class="form-control selectpicker " onchange="LocalTeam()" data-style="btn-info" data-live-search="true">
+                                    <option>Home Team</option>
+                                    @foreach (var country in Model.Item1)
+                                    {
+                                        <option>
+                                            @country.Name
+                                            @foreach (var league in country.Leagues)
+                                            {
+                                                <optgroup label="@league.Name">
+                                                    @foreach (var team in league.Teams)
+                                                    {
+                                                        <option>@team.Name</option>
+                                                    }
+                                                </optgroup>
+                                            }
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                            @*<div class="form-group row col-lg-5">
+                                <select name="SelectHomeTeam" id="selectLocalTeam" class="selectpicker " onchange="LocalTeam()" data-style="btn-info" data-live-search="true">
+                                    <option>Home Team</option>
+                                    @foreach (var country in Model.Item1)
+                                    {
+                                        <option>
+                                            @country.Name
+                                            @foreach (var league in country.Leagues)
+                                            {
+                                                <optgroup label="@league.Name">
+                                                    @foreach (var team in league.Teams)
+                                                    {
+                                                        <option>@team.Name</option>
+                                                    }
+                                                </optgroup>
+                                            }
+                                        </option>
+                                    }
+                                </select>
+                            </div>*@
+
+                            <div class="col-lg-offset-2 col-lg-5">
+                                <select name="SelectAwayTeam" id="selectAwayTeam" class="form-control selectpicker" onchange="AwayTeam()" data-style="btn-info" data-live-search="true">
+                                    <option>Away Team</option>
+                                    @foreach (var country in Model.Item1)
+                                    {
+                                        foreach (var league in country.Leagues)
+                                        {
+                                            <optgroup label="@league.Name">
+                                                @foreach (var team in league.Teams)
+                                                {
+                                                    <option>@team.Name</option>
+                                                }
+                                            </optgroup>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-lg-12">
+                                <br/>
+                            </div>
+                            @*<div class="form-group row col-lg-offset-2 col-lg-5">
+                                <select name="SelectAwayTeam" id="selectAwayTeam" class="selectpicker" onchange="AwayTeam()" data-style="btn-info" data-live-search="true">
+                                    <option>Away Team</option>
+                                    @foreach (var country in Model.Item1)
+                                    {
+                                        foreach (var league in country.Leagues)
+                                        {
+                                            <optgroup label="@league.Name">
+                                                @foreach (var team in league.Teams)
+                                                {
+                                                    <option>@team.Name</option>
+                                                }
+                                            </optgroup>
+                                        }
+                                    }
+                                </select>
+                            </div>*@
+                            <div class="col-lg-5">
+                                <select name="SelectTips" id="selectTip" class="form-control selectpicker" data-style="btn-info" data-live-search="true">
+                                    <option>Type Of Tip</option>
+                                    @foreach (var tip in Model.Item2)
+                                    {
+                                        <option>@tip.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            @*<div class="form-group row col-lg-5">
+                                <select name="SelectTips" id="selectTip" class="selectpicker" data-style="btn-info" data-live-search="true">
+                                    <option>Type Of Tip</option>
+                                    @foreach (var tip in Model.Item2)
+                                    {
+                                        <option>@tip.Name</option>
+                                    }
+                                </select>
+                            </div>*@
+                            <div class="col-lg-offset-2 col-lg-5">
+                                <div class="input-group date" id="datetimepicker">
+                                    <input type="datetime" class="form-control label-info" name="StartMatch" placeholder="Start match" style="color: white" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <br />
+                            </div>
+                            @*<div class="form-group row col-lg-offset-2 col-lg-5">
+                                <div class="input-group date pull-right " id="datetimepicker">
+                                    <input type="datetime" class="form-control label-info" name="StartMatch" placeholder="Start match" style="color: white" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>*@
+                            <div class="col-lg-5">
+                                <div class="input-group">
+                                    <input id="StartMacth" class=" form-control btn-info" type="text" name="Koeficent" placeholder="Coefficient" value="">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-ok" id="message3"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            @*<div class="form-group row col-lg-5">
+                                <div class="input-group">
+                                    <input id="StartMacth" class=" form-control btn-info" type="text" name="Koeficent" placeholder="Coefficient" value="">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-ok" id="message3"></span>
+                                    </span>
+                                </div>
+                            </div>*@
+                            <div class="col-lg-offset-2 col-lg-5">
+                                <div class="input-group">
+                                    <input id="chance" class=" form-control btn-info" type="text" name="Chance" placeholder="Chance in %" value="">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-ok" id="message3"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            @*<div class="form-group row col-lg-offset-2 col-lg-5">
+                                <div class="input-group">
+                                    <input id="chance" class=" form-control btn-info" type="text" name="Chance" placeholder="Chance in %" value="">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-ok" id="message4"></span>
+                                    </span>
+                                </div>
+                            </div>*@
+                            <div class="col-lg-12">
+                                <br />
+                            </div>
+                            <div class="form-group row col-lg-offset-3 col-lg-6">
+                                <input type="submit" id="btn-login" class="btn btn-success btn-lg btn-block" value="Post" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
 
     }
+</div>
+
+
+
 
 
 

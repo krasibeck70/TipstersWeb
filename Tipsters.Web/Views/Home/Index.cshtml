@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Tipsters.Models.Models.Pronostic>
+﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<Tipsters.Models.Models.Pronostic>
 @section scripts
 {
 <script src="http://malsup.github.com/jquery.form.js"></script> 
@@ -17,6 +18,7 @@
     <div class="col-10 text-center">
         @foreach (var tip in Model)
         {
+            string userId = @User.Identity.GetUserId();
             <div id="customJumbotron" class="jumbotron">
                 <div class="pull-left col-3 text-center">
                     <a href="@Url.Action("Profile","Users",new {id = tip.User.Id})"><button class="btn btn-success"><strong>@tip.User.UserName</strong></button></a>
@@ -57,9 +59,16 @@
                     </div>
 
                     <div class="col-3 pull-right">
-
-                        <button type="button" id="button_up_ajax-@tip.Id" data-val="@tip.VotesUp" data-tip="@tip.Id" class="btn btn-success glyphicon glyphicon-thumbs-up Up btn-vote">&nbsp; @tip.VotesUp</button>
-                        <button type="button" id="button_down_ajax-@tip.Id" data-val2="@tip.VotesDown" data-tip="@tip.Id" class="btn btn-success glyphicon glyphicon-thumbs-down Down btn-vote">&nbsp; @tip.VotesDown</button>
+                        @if (tip.ContainsUserId(tip.UsersLikes, userId))
+                        {
+                            <button class="btn btn-success glyphicon glyphicon-thumbs-up disabled">&nbsp; @tip.VotesUp</button>
+                            <button class="btn btn-success glyphicon glyphicon-thumbs-down disabled">&nbsp; @tip.VotesDown</button>
+                        }
+                        else
+                        {
+                            <button type="button" id="button_up_ajax-@tip.Id" data-val="@tip.VotesUp" data-tip="@tip.Id" class="btn btn-success glyphicon glyphicon-thumbs-up Up btn-vote">&nbsp; @tip.VotesUp</button>
+                            <button type="button" id="button_down_ajax-@tip.Id" data-val2="@tip.VotesDown" data-tip="@tip.Id" class="btn btn-success glyphicon glyphicon-thumbs-down Down btn-vote">&nbsp; @tip.VotesDown</button>
+                        } 
                     </div>
                     <br>
                     <br>

@@ -1,35 +1,59 @@
-﻿.form-area
-{
-    /*background-color: #FAFAFA;*/
-	padding: 10px 40px 60px;
-	margin: 10px 0px 60px;
-	/*border: 1px solid GREY;*/
-	}
-.jumbotron{
-	margin-left: 20%;
-	margin-right: 20%;
+﻿#wrapper {
+    height: auto;
+    width: 1200px;
+    margin: 0 auto; 
+}
+.jumbotron {
+    margin-left: 18%;
+    margin-right: 18%;
+    height: 5in;
     background-color: beige;
-}
-#PostTips{
-	text-align: center;
-	margin-top: -5%;
-	
-}
-#StartMacth{
-	width: 2.3in;
-	height: 0.35in;
 }
 
 input::-webkit-input-placeholder {
-color: white !important;
+    color: white !important;
 }
-#chance{
+
+
+
+
+
+
+/*.form-area {
+    
+    padding: 10px 40px 60px;
+    margin: 10px 0px 60px;
+   
+}
+
+.jumbotron {
+    margin-left: 20%;
+    margin-right: 20%;
+    background-color: beige;
+}
+
+#PostTips {
+    text-align: center;
+    margin-top: -5%;
+}
+
+#StartMacth {
     width: 2.3in;
-	height: 0.35in;
+    height: 0.35in;
+}
+
+input::-webkit-input-placeholder {
+    color: white !important;
+}
+
+#chance {
+    width: 2.3in;
+    height: 0.35in;
     margin-top: -6%;
 }
+
 #datetimepicker {
     width: 2.3in;
     height: 0.35in;
     position: relative;
-}
+}*/

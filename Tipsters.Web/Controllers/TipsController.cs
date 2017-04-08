@@ -74,30 +74,28 @@ namespace Tipsters.Web.Controllers
             return RedirectToAction("Login", "Account");
 
         }
-        //[HttpPost]
-        //[Route("UpVotesTips/{id}")]
-        //public ActionResult UpVotesTips(string id)
-        //{
-        //    if (Request.IsAuthenticated)
-        //    {
-        //        var pronostic = this.data.Pronostics.Find(x => x.Id == id).First();
-        //        pronostic.VotesUp++;
-        //        this.data.SaveChanges();
-        //        return null;
-        //    }
-        //    return RedirectToAction("Login", "Account");
-
-        //}
-
+       
         [HttpPost]
         [Route("VotesTips/{id}")]
         public ActionResult VotesTips(string id)
         {
             var newId = id.Split('¿')[0];
             var parameter = id.Split('¿')[1];
+
             if (Request.IsAuthenticated)
             {
+                if (id == "undefined¿Down" || id == "undefined¿Up")
+                {
+                    return null;
+                }
+                var userId = User.Identity.GetUserId();
+                var user = this.data.Users.Find(x => x.Id == userId).First();
                 var pronostic = this.data.Pronostics.Find(x => x.Id == newId).First();
+                if (user.LikesPronostics.Contains(pronostic))
+                {
+                    return null;
+                }
+                user.LikesPronostics.Add(pronostic);
                 if (parameter =="Up")
                 {
                     pronostic.VotesUp++;
@@ -129,6 +127,7 @@ namespace Tipsters.Web.Controllers
             //return RedirectToAction("Login", "Account");
 
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("Top10Tips")]
         public ActionResult Top10Tips()

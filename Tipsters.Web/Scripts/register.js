@@ -12,7 +12,7 @@
 $('#Email_js').on('keyup',
     function () {
         var email = $(this).val();
-        var regex = /^(([^<>()\[\]\\.,;:\&@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        var regex = /^(([^<>()\[\]\\.,;:\&@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (regex.test(email)) {
             $('#message3').removeClass("glyphicon glyphicon-remove").addClass('glyphicon glyphicon-ok').html('').css('color', 'green');
         } else $('#message3').removeClass("glyphicon glyphicon-ok").addClass('glyphicon glyphicon-remove').html('').css('color', 'red');
