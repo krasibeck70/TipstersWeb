@@ -100,6 +100,7 @@
     <Compile Include="ViewModels\AccountViewModel\ResetPasswordViewModel.cs" />
     <Compile Include="ViewModels\AccountViewModel\SendCodeViewModel.cs" />
     <Compile Include="ViewModels\AccountViewModel\VerifyCodeViewModel.cs" />
+    <Compile Include="ViewModels\AdminViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModel\AddPhoneNumberViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModel\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModel\ConfigureTwoFactorViewModel.cs" />

@@ -19,14 +19,16 @@ namespace Tipsters.Web.Controllers
     public class TipsController : Controller
     {
         private TipstersData data;
-        private UserService service;
+        private UserService userService;
+        private TipsService tipsService;
         public TipsController():this(new TipstersData())
         {
             this.data = new TipstersData();
         }
         public TipsController(ITipstersData data)
         {
-            this.service = new UserService(data);
+            this.userService = new UserService(data);
+            this.tipsService = new TipsService(data);
         }
         [HttpGet]
         [Route("PostTips")]
@@ -49,27 +51,8 @@ namespace Tipsters.Web.Controllers
             if (Request.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
-
-                ApplicationUser user = this.data.Users.Find(x => x.Id == userId).First();
-                Guid g = Guid.NewGuid();
-                string GuidString = Convert.ToBase64String(g.ToByteArray());
-                GuidString = GuidString.Replace("=", "");
-                Pronostic pronostic = new Pronostic()
-                {
-                    Id = g.ToString(),
-                    User = user,
-                    Chance = ptbm.Chance,
-                    AwayTeam = ptbm.SelectAwayTeam,
-                    LocalTeam = ptbm.SelectHomeTeam,
-                    Koeficent = ptbm.Koeficent,
-                    StartMatch = ptbm.StartMatch,
-                    TimeElpased = DateTime.Now,
-                    TypeOfPrognise = ptbm.SelectTips
-                };
-                this.data.Pronostics.InsertOrUpdate(pronostic);
-                this.data.SaveChanges();
-
-                return RedirectToAction("Profile", "Users", new { id = user.Id });
+                this.tipsService.PostTips(ptbm,userId);
+                return RedirectToAction("Profile", "Users", new { id = userId });
             }
             return RedirectToAction("Login", "Account");
 
@@ -120,12 +103,8 @@ namespace Tipsters.Web.Controllers
                     var json = JsonConvert.SerializeObject(votes);
                     return Json(json);
                 }
-                
-                
             }
             return null;
-            //return RedirectToAction("Login", "Account");
-
         }
         [Authorize(Roles = "Admin")]
         [HttpGet]
@@ -158,8 +137,6 @@ namespace Tipsters.Web.Controllers
                     TimePosted = DateTime.Now
                 };
                 this.data.Comments.InsertOrUpdate(comment);
-                //pronostic.OwnerComments.Add(comment);
-                //user.CommentsPronostics.Add(comment);
                 this.data.SaveChanges();
                 var resultPronostic = this.data.Pronostics.Find(x => x.Id == pronostic.Id).First();
                 var coment = new

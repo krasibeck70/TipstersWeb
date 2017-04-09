@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Hosting;
 using Tipsters.Data.Interfaces;
+using Tipsters.Models.Models;
 using Tipsters.Models.ViewModels.AccountViewModel;
 
 namespace Tipsters.Services
@@ -9,105 +14,41 @@ namespace Tipsters.Services
     {
         public UserService(ITipstersData data) : base(data)
         {
+
         }
 
-        //public bool IsregisteredUser(LoginViewModel lumb)
-        //{
-        //    var user = this.data.Users.FindByPredicate(x => x.Username == lumb.Username && x.Password == lumb.Password);
-        //    if (user != null)
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
+        public void FollowUser(string userLoginId, string userFollowedId)
+        {
+            var userLogin = data.Users.Find(x => x.Id == userLoginId).First();
+            var userFollowed = data.Users.Find(x => x.Id == userFollowedId).First();
+            if (userLogin.OwnerFollowers.Contains(userFollowed))
+            {
+                userLogin.OwnerFollowers.Remove(userFollowed);
+            }
+            else
+            {
+                userLogin.OwnerFollowers.Add(userFollowed);
+            }
+            data.SaveChanges();
+        }
 
-        //public void Logout(string sessionId)
-        //{
-        //    Login login = this.data.Logins.Find(x => x.SessionId == sessionId && x.IsActive == true).First();
-        //    login.IsActive = false;
-        //    this.data.SaveChanges();
-        //}
-
-        //public bool IsExistUsername(string username)
-        //{
-        //    var user = this.data.Users.Find(x => x.Username == username).FirstOrDefault();
-        //    if (user != null)
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
-        //public bool IsExistEmail(string email)
-        //{
-        //    var user = this.data.Users.Find(x => x.Email == email).FirstOrDefault();
-        //    if (user != null)
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
-
-        //public Dictionary<string, string> ValidationRegisteruser(RegisterUserBindingModel user)
-        //{
-        //    Dictionary<string, string> errors = new Dictionary<string, string>();
-        //    if (!string.IsNullOrEmpty(user.Username))
-        //    {
-        //        if (IsExistUsername(user.Username))
-        //        {
-        //            errors.Add("CustomUsernameExist", "The Username has been alredy exist");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        errors.Add("CustomUsername", "Username Required");
-        //    }
-
-        //    if (!string.IsNullOrEmpty(user.Email))
-        //    {
-        //        if (IsExistUsername(user.Email))
-        //        {
-        //            errors.Add("CustomEmailExist", "The Email has been alredy exist");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        errors.Add("CustomEmail", "Email Required");
-        //    }
-        //    if (!string.IsNullOrEmpty(user.FullName))
-        //    {
-        //        if (!user.FullName.Contains(" "))
-        //        {
-        //            errors.Add("CustomFullName", "Full name required one white space");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        errors.Add("CustomFullName", "Full Name Required");
-        //    }
-        //    if (user.BirthDate != null)
-        //    {
-        //        var years = DateTime.Now.AddTicks(user.BirthDate.Ticks).Year - 1;
-        //        if (years < 13)
-        //        {
-        //            errors.Add("CustomBirthdate", "You don't have 13 years");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        errors.Add("CustomBirthdate", "Birthdate Required");
-        //    }
-        //    if (!string.IsNullOrEmpty(user.Password))
-        //    {
-        //        if (user.Password != user.ConfirmPassword)
-        //        {
-        //            errors.Add("CustomPassword", "Passwords do not match");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        errors.Add("CustomPassword", "Password Required");
-        //    }
-        //    return errors;
-        //}
+        public void ChangeProfilePicture(string userId, HttpPostedFileBase file)
+        {
+            var user = data.Users.Find(x => x.Id == userId).First();
+            string fileExt = System.IO.Path.GetExtension(file.FileName);
+            var imageName = user.Email + ".png";
+            if (fileExt.ToLower().EndsWith(".png") || fileExt.ToLower().EndsWith(".jpg"))
+            {
+                var filePath = HostingEnvironment.MapPath("~/Content/Images/") + imageName;
+                var directory = new DirectoryInfo(HostingEnvironment.MapPath("~/Content/Images/"));
+                if (directory.Exists == false)
+                {
+                    directory.Create();
+                }
+                user.Image = imageName;
+                file.SaveAs(filePath);
+                data.SaveChanges();
+            }
+        }
     }
 }

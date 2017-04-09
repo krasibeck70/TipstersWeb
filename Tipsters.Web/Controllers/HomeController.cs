@@ -20,5 +20,10 @@ namespace Tipsters.Web.Controllers
             var tips = data.Pronostics.GetAll().Include("User").Include("OwnerComments").ToList();
             return View(tips);
         }
+
+        public ActionResult Demo()
+        {
+            return View();
+        }
     }
 }
