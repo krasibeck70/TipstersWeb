@@ -1,5 +1,5 @@
 ﻿@using Microsoft.Ajax.Utilities
-@model IEnumerable<Tipsters.Models.Models.Pronostic>
+@model IEnumerable<Tipsters.Models.ViewModels.PronosticsViewModel.PronosticViewModel>
 @section scripts
 {
     <script src="http://malsup.github.com/jquery.form.js"></script>
@@ -20,7 +20,7 @@
     </div>
     <br />
     <div class="col-10 text-center">
-        @foreach (var tip in Model)
+        @foreach (var tip in Model.OrderByDescending(x=>x.TimeElpased))
         {
             <div id="customJumbotron" class="jumbotron">
                 <div class="pull-left col-3 text-center">

@@ -60,6 +60,13 @@ namespace Tipsters.Web.Controllers
             }
         }
 
+        private void NavbarInfo()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = data.Users.Find(x => x.Id == userId).FirstOrDefault();
+            ViewBag.Image = user != null ? user.Image : null;
+            ViewBag.FullName = user != null ? user.FullName : null;
+        }
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -380,7 +387,7 @@ namespace Tipsters.Web.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, BirthDate = model.Birthdate, FullName = info.DefaultUserName};
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, BirthDate = model.Birthdate, FullName = info.DefaultUserName, Image = "avatar.png"};
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

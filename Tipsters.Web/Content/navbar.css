@@ -1,4 +1,4 @@
-﻿@media screen and (min-width:768px){
+﻿/*@media screen and (min-width:768px){
     .navbar-brand-centered {
         position: absolute;
         left: 50%;
@@ -20,4 +20,39 @@
     .nav.navbar-nav li a{
         color: white;
     }
+}*/
+
+.navbar-login {
+    width: 305px;
+    padding: 10px;
+    padding-bottom: 0px;
+}
+
+.navbar-login-session {
+    padding: 2px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+.nav.navbar-nav li a {
+    color: white;
+}
+.navbar-default {
+    background-color: #A4BA6F;
+    border: 0;
+}
+.navbar-nav > li > a.profile-image {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+#profile-avatar {
+    width: 0.5in;
+    height: 0.5in;
+}
+#profile-avatar-login {
+    width: 1in;
+    height: 1in;
+}
+.dropdown-toggle:active, .open .dropdown-toggle {
+    background: #A4BA6F !important;
+    color: #000 !important;
 }

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Tipsters.Data.Interfaces;
 using Tipsters.Models.BindingModels;
 using Tipsters.Models.Models;
+using Tipsters.Models.ViewModels.PronosticsViewModel;
 
 namespace Tipsters.Services
 {
@@ -32,6 +35,17 @@ namespace Tipsters.Services
             };
             data.Pronostics.InsertOrUpdate(pronostic);
             data.SaveChanges();
+        }
+
+        public List<PronosticViewModel> GetAllPronosticViewModels()
+        {
+            var pronosticsViewModel = new List<PronosticViewModel>();
+            var pronostics = data.Pronostics.GetAll().ToList();
+            foreach (Pronostic pronostic in pronostics)
+            {
+                pronosticsViewModel.Add(Mapper.Map<PronosticViewModel>(pronostic));
+            }
+            return pronosticsViewModel;
         }
     }
 }

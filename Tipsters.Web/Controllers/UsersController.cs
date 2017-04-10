@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using Tipsters.Data;
@@ -14,6 +15,7 @@ using Tipsters.Data.Interfaces;
 using Tipsters.Models.Models;
 using Tipsters.Services;
 using FacebookEasyAccess.Interfaces;
+using Tipsters.Models.ViewModels.UsersViewMode;
 
 namespace Tipsters.Web.Controllers
 {
@@ -35,19 +37,21 @@ namespace Tipsters.Web.Controllers
         [Route("Tipsters")]
         public ActionResult Tipsters()
         {
-            var users = data.Users.GetAll().ToList();
-            return View(users);
+            NavbarInfo();
+            return View(this.userService.UserViewModels());
         }
 
         [HttpGet]
         [Route("Profile/{id?}")]
         public new ActionResult Profile(string id)
         {
+            NavbarInfo();
             var user = new ApplicationUser();
             if (id != null)
             {
                 user = this.data.Users.Find(x => x.Id == id).First();
-                return View(user);
+                UserViewModel userModel = Mapper.Map<UserViewModel>(user);
+                return View(userModel);
             }
             else
             {
@@ -57,7 +61,8 @@ namespace Tipsters.Web.Controllers
                 {
                     return RedirectToAction("Index", "Home");
                 }
-                return View(user);
+                UserViewModel userModel = Mapper.Map<UserViewModel>(user);
+                return View(userModel);
             }
         }
 
@@ -65,6 +70,7 @@ namespace Tipsters.Web.Controllers
         [HttpPost]
         public new ActionResult Profile(HttpPostedFileBase file)
         {
+            NavbarInfo();
             if (Request.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
@@ -78,6 +84,7 @@ namespace Tipsters.Web.Controllers
         [Route("FollowUser/{id}")]
         public ActionResult FollowUser(string id)
         {
+            NavbarInfo();
             if (Request.IsAuthenticated)
             {
                 var userLoginId = User.Identity.GetUserId();
@@ -90,6 +97,7 @@ namespace Tipsters.Web.Controllers
         [Route("AllEmails")]
         public JsonResult AllEmails()
         {
+            NavbarInfo();
             var users = this.data.Users.GetAll();
             var emails = users.Select(x => x.Email);
             return Json(emails, JsonRequestBehavior.AllowGet);
@@ -97,6 +105,7 @@ namespace Tipsters.Web.Controllers
         [HttpGet]
         public ActionResult FindUserById(string id)
         {
+            NavbarInfo();
             var user = this.data.Users.Find(x => x.Id == id).First();
             var currentUser = new
             {
@@ -105,6 +114,14 @@ namespace Tipsters.Web.Controllers
             };
             var json = JsonConvert.SerializeObject(currentUser);
             return Json(json, JsonRequestBehavior.AllowGet);
+        }
+
+        private void NavbarInfo()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = data.Users.Find(x => x.Id == userId).FirstOrDefault();
+            ViewBag.Image = user != null ? user.Image : null;
+            ViewBag.FullName = user != null ? user.FullName : null;
         }
     }
 }

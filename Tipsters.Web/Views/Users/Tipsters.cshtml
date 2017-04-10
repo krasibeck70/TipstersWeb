@@ -1,41 +1,18 @@
-﻿@using Tipsters.Models.Models
-@model IEnumerable<Tipsters.Models.Models.ApplicationUser>
+﻿@using AutoMapper
+@using Microsoft.AspNet.Identity
+@using Tipsters.Models.Models
+@using Tipsters.Models.ViewModels.UsersViewMode
+@model IEnumerable<Tipsters.Models.ViewModels.UsersViewMode.UserViewModel>
 @section Styles{
+
     <link href=@Url.Content("~/Content/Tipsters.css") rel="stylesheet" />
 }
-@section scripts
-{
-    <script>
-      //function MyFuncion(value) {
-      //    var text = document.getElementById(value).firstChild;
-      //    text.data = text.data == "Follow" ? "Followed" : "Follow";
-      //    var url1 = "/Users/FollowUser/" + value;
-      //    $.ajax({
-      //            type: "POST",
-      //            url: url1
-      //        }
-      //    );
-      //  }
 
-        $(".btn-follow").click(function () {
-            var user_id = $(this).data("follow");
-            console.log(user_id);
-            var text = this.innerHTML;
-            if (text == "Follow") {
-                this.innerHTML = "Followed";
-            }
-            else if (text == "Followed") {
-                this.innerHTML = "Follow";
-            }
-            var url = "/Users/FollowUser/";
-            $.ajax({
-                 type: "POST",
-                 url: url + user_id
-             }
-         );
-        })
-</script>    
+@section scripts
+{  
+    <script src="~/Scripts/tipsters.js"></script>
 }
+
 @{
     ViewBag.Title = "Tipsters";
     
@@ -45,12 +22,11 @@
     <div class="container bootstrap snippet">
         @foreach (var user in Model)
         {
-            var userLog = Model.FirstOrDefault(x => x.UserName == User.Identity.Name);
-            if (user.UserName == User.Identity.Name)
+            var userLog = Model.FirstOrDefault(x => x.Email == User.Identity.Name);
+            if (user.Email == User.Identity.Name)
             {
                 continue;
             }
-
             <div class="col-sm-4">
                 <!-- Begin user profile -->
                 <div class="box-info text-center user-profile-2">
@@ -69,8 +45,6 @@
                             <img src="~/Content/Images/@user.Image" class="img-circle profile-avatar" alt="User avatar">
                             <h5>Tips @user.OwnerPronostics.Count</h5>
                         }
-                        
-
                         <!-- User button -->
                         <div class="user-button">
                             <div class="row">
@@ -79,8 +53,8 @@
                                 </div>
                                 @if (Request.IsAuthenticated)
                                 {
-                                    
-                                    if (userLog.OwnerFollowers.Contains(user))
+                                    ApplicationUser userModel = Mapper.Map<ApplicationUser>(user);
+                                    if (userLog.OwnerFollowers.Contains(userModel))
                                     {
                                         <div class="col-md-6">
                                             <button type="submit" data-follow="@user.Id" class="btn btn-default btn-sm btn-block btn-follow" style="font-weight: bold">Followed</button>
@@ -92,57 +66,12 @@
                                             <button type="submit" data-follow="@user.Id" class="btn btn-default btn-sm btn-block btn-follow">Follow</button>
                                         </div>
                                     }
-
-
                                 }
-
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-
-
         }
     </div>
-
 </main>
-
-    
-    @*<main>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                       @foreach (var user in Model)
-                       {
-                        <div class="card col-md-2 col-md-offset-0 thumbnail">
-                            <div class="col-lg-offset-0">
-                                <span class="btn btn-success col-lg-12 text-center">@user.Username</span>
-                            </div>
-                            <img class="card-image-top img-fluid img-thumbnail" src="~/Content/Images/@user.Image" style="width: 600px; height: 200px;">
-                            <div class="card-block">
-                                <br>
-                                <span class="btn btn-info">@user.OwnerPronostics.Count Followers</span>
-                                <span class="btn btn-warning">@user.OwnerFollowers.Count Tips</span><br><br>
-                                <p>
-                                    <a class="btn btn-primary" name="info" href="@Url.Action("Profile","Users", new {id = user.Id})">Profile</a>
-                                    <button class="btn btn-warning" id="@user.Username" OnClick="toggleText(this.id);" name="follow" >Follow</button>
-                                </p>
-                        <script>
-                            function toggleText(@user.Username){
-                            var text = document.getElementById(@user.Username).firstChild;
-
-                            text.data = text.data == "Follow" ? "Followed" : "Follow";
-                            }
-                            $.ajax(
-                                {url: '@Html.Action("FollowUser","Users", new {id = user.Id})'}
-                                    );
-                        </script>
-                            </div>
-                        </div>
-                       }
-                    </div>
-                </div>
-        </main>*@
-

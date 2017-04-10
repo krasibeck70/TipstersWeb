@@ -1,12 +1,17 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Tipsters.Data;
 using Tipsters.Data.Interfaces;
+using Tipsters.Models.BindingModels;
 using Tipsters.Models.ViewModels.AdminViewModels;
 using Tipsters.Services;
 using Tipsters.Services.AdminServices;
 
 namespace Tipsters.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
+    [RoutePrefix("Admin")]
     public class AdminController : Controller
     {
         private TipstersData data;
@@ -29,6 +34,7 @@ namespace Tipsters.Web.Controllers
         
         public ActionResult Home()
         {
+            NavbarInfo();
             HomeViewModel model = new HomeViewModel()
             {
                 NumbersOfUsers = this.adminHomeService.GetNumbersOfUsers(),
@@ -40,28 +46,56 @@ namespace Tipsters.Web.Controllers
 
         public ActionResult Users()
         {
+            NavbarInfo();
             return View(this.adminUserService.GetAllUsers());
         }
 
         public ActionResult Tips()
         {
+            NavbarInfo();
             return View(this.adminTipsService.GetAllTips());
         }
 
         public ActionResult Comments()
         {
+            NavbarInfo();
             return View(this.adminCommentService.GetAllComments());
         }
 
         public ActionResult Others()
         {
+            NavbarInfo();
             return View();
         }
 
         public ActionResult RemoveUser(string id)
         {
+            NavbarInfo();
             this.adminUserService.RemoveUser(id);
             return RedirectToAction("Users", "Admin");
+        }
+        [HttpGet]
+        [Route("EditUser/{id}")]
+        public ActionResult EditUser(string id)
+        {
+            NavbarInfo();
+            return View(this.adminUserService.UserById(id));
+        }
+        [HttpPost]
+        [Route("EditUser/{id}")]
+        public ActionResult EditUserSave(string id, EditUserBindingModel eubm)
+        {
+            NavbarInfo();
+            this.adminUserService.EditUserAndSave(id,eubm);
+            return RedirectToAction("Users", "Admin");
+        }
+
+        private void NavbarInfo()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = data.Users.Find(x => x.Id == userId).FirstOrDefault();
+            ViewBag.Image = user != null ? user.Image : null;
+            ViewBag.FullName = user != null ? user.FullName : null;
         }
 
     }

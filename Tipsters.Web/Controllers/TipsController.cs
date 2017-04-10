@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
-using Microsoft.ApplicationInsights.Web;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using Tipsters.Data;
@@ -34,6 +32,7 @@ namespace Tipsters.Web.Controllers
         [Route("PostTips")]
         public ActionResult PostTips()
         {
+            NavbarInfo();
             if (Request.IsAuthenticated)
             {
                 var tip = this.data.Tips.GetAll().ToList();
@@ -48,6 +47,7 @@ namespace Tipsters.Web.Controllers
         [Route("PostTips")]
         public ActionResult PostTips(PostTipsBindingModel ptbm)
         {
+            NavbarInfo();
             if (Request.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
@@ -62,6 +62,7 @@ namespace Tipsters.Web.Controllers
         [Route("VotesTips/{id}")]
         public ActionResult VotesTips(string id)
         {
+            NavbarInfo();
             var newId = id.Split('¿')[0];
             var parameter = id.Split('¿')[1];
 
@@ -106,18 +107,18 @@ namespace Tipsters.Web.Controllers
             }
             return null;
         }
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("Top10Tips")]
         public ActionResult Top10Tips()
         {
-            var tips = this.data.Pronostics.GetAll().ToList();
-            return View(tips);
+            NavbarInfo();
+            return View(this.tipsService.GetAllPronosticViewModels());
         }
         [HttpPost]
         [Route("PostComment/{id}")]
         public ActionResult PostComment(string id,PostCommentBindingModel model)
         {
+            NavbarInfo();
             if (Request.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
@@ -157,6 +158,7 @@ namespace Tipsters.Web.Controllers
         [Route("GetAllCommentsForThisTip/{id}")]
         public ActionResult GetAllCommentsForThisTip(string id)
         {
+            NavbarInfo();
             var pronostic = this.data.Pronostics.Find(x => x.Id == id).First();
             var comments = pronostic.OwnerComments.Select(x => new
             {
@@ -166,6 +168,13 @@ namespace Tipsters.Web.Controllers
                 userId = x.UserId
              });
             return Json(comments, JsonRequestBehavior.AllowGet);
+        }
+        private void NavbarInfo()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = data.Users.Find(x => x.Id == userId).FirstOrDefault();
+            ViewBag.Image = user != null ? user.Image : null;
+            ViewBag.FullName = user != null ? user.FullName : null;
         }
     }
 }

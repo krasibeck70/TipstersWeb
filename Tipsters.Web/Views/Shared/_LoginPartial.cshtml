@@ -1,9 +1,48 @@
 ﻿@using Microsoft.AspNet.Identity
+@using Tipsters.Models.ViewModels.UsersViewMode
 @if (Request.IsAuthenticated)
 {
-
-        <li><a href="@Url.Action("Profile", "Users", new {id = @User.Identity.GetUserId()})"><strong>@User.Identity.GetUserName()</strong></a></li>
-        <li><a href="@Url.Action("LogOff","Account")"><strong>Logout</strong></a></li>
+    if (User.IsInRole("Admin"))
+    {
+        <li><a href="@Url.Action("Home", "Admin")"><strong>Admin Panel</strong></a></li>
+    }
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle profile-image" data-toggle="dropdown">
+            <img id="profile-avatar" src="~/Content/Images/@ViewBag.Image" class="img-circle special-img">
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <div class="navbar-login">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <p class="text-center">
+                                <span><img id="profile-avatar-login" src="~/Content/Images/@ViewBag.Image" class="img-circle"></span>
+                            </p>
+                        </div>
+                        <div class="col-lg-7">
+                            <p class="text-left"><strong>@ViewBag.FullName</strong></p>
+                            <p class="text-left small">@User.Identity.GetUserName()</p>
+                            <p class="text-left">
+                                <a href="@Url.Action("Profile","Users", new {id = User.Identity.GetUserId()})" class="btn btn-primary btn-block btn-sm">Profile</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <div class="navbar-login navbar-login-session">
+                    <div class="row">
+                        <div class="col-lg-offset-2 col-lg-8">
+                            <p>
+                                <a href="@Url.Action("LogOff", "Account")" class="btn btn-danger btn-block btn-sm pull-right">Logout</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </li>
 }
 else
 {

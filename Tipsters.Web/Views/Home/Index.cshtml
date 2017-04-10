@@ -1,9 +1,9 @@
 ﻿@using Microsoft.AspNet.Identity
-@model IEnumerable<Tipsters.Models.Models.Pronostic>
+@model IEnumerable<Tipsters.Models.ViewModels.PronosticsViewModel.PronosticViewModel>
 @section scripts
 {
-<script src="http://malsup.github.com/jquery.form.js"></script> 
-<script src="~/Scripts/Tips.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script> 
+    <script src="~/Scripts/Tips.js"></script>
 }
 
 @section Styles {
@@ -16,7 +16,7 @@
 
 <div class="row">
     <div class="col-10 text-center">
-        @foreach (var tip in Model)
+        @foreach (var tip in Model.OrderByDescending(x=>x.TimeElpased))
         {
             string userId = @User.Identity.GetUserId();
             <div id="customJumbotron" class="jumbotron">

@@ -1,7 +1,9 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Tipsters.Data;
+using Tipsters.Data.Interfaces;
+using Tipsters.Services;
 
 namespace Tipsters.Web.Controllers
 {
@@ -9,16 +11,24 @@ namespace Tipsters.Web.Controllers
     public class HomeController : Controller
     {
         private TipstersData data;
-        public HomeController()
+        private TipsService tipsService;
+        public HomeController() : this(new TipstersData())
         {
             this.data = new TipstersData();
+        }
+        public HomeController(ITipstersData data)
+        {
+            this.tipsService = new TipsService(data);
         }
         [HttpGet]
         //[Route("Index")]
         public ActionResult Index()
         {
-            var tips = data.Pronostics.GetAll().Include("User").Include("OwnerComments").ToList();
-            return View(tips);
+            var userId = User.Identity.GetUserId();
+            var user = data.Users.Find(x => x.Id == userId).FirstOrDefault();
+            ViewBag.Image = user != null ? user.Image : null;
+            ViewBag.FullName = user != null ? user.FullName : null;
+            return View(this.tipsService.GetAllPronosticViewModels());
         }
 
         public ActionResult Demo()

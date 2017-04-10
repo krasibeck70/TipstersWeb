@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNet.Identity;
 using Tipsters.Data;
 using Tipsters.Data.Interfaces;
+using Tipsters.Models.BindingModels;
 using Tipsters.Models.Models;
+using Tipsters.Models.ViewModels.UsersViewMode;
 
 namespace Tipsters.Services.AdminServices
 {
@@ -63,6 +67,28 @@ namespace Tipsters.Services.AdminServices
                 return true;
             }
             return false;
+        }
+
+        public UserViewModel UserById(string id)
+        {
+            var user = data.Users.Find(x => x.Id == id).First();
+            UserViewModel userModel = Mapper.Map<UserViewModel>(user);
+            return userModel;
+        }
+        public ApplicationUser UserByIdEdit(string id)
+        {
+            var user = data.Users.Find(x => x.Id == id).First();
+            return user;
+        }
+
+        public void EditUserAndSave(string id, EditUserBindingModel eubm)
+        {
+            var user = UserByIdEdit(id);
+            user.FullName = eubm.FullName;
+            user.Image = eubm.Image;
+            user.Email = eubm.Email;
+            data.Users.InsertOrUpdate(user);
+            data.SaveChanges();
         }
     }
 }

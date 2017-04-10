@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Hosting;
+using AutoMapper;
 using Tipsters.Data.Interfaces;
 using Tipsters.Models.Models;
-using Tipsters.Models.ViewModels.AccountViewModel;
+using Tipsters.Models.ViewModels.UsersViewMode;
 
 namespace Tipsters.Services
 {
@@ -49,6 +49,17 @@ namespace Tipsters.Services
                 file.SaveAs(filePath);
                 data.SaveChanges();
             }
+        }
+
+        public List<UserViewModel> UserViewModels()
+        {
+            var users = data.Users.GetAll().ToList();
+            var userViewModel = new List<UserViewModel>();
+            foreach (ApplicationUser applicationUser in users)
+            {
+                userViewModel.Add(Mapper.Map<UserViewModel>(applicationUser));
+            }
+            return userViewModel;
         }
     }
 }
