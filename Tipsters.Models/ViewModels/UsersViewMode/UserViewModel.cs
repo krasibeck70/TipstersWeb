@@ -14,6 +14,9 @@ namespace Tipsters.Models.ViewModels.UsersViewMode
         public DateTime BirthDate { get; set; }
         public string Image { get; set; }
 
+        public DateTime CreatedUser { get; set; }
+        public bool IsAdmin { get; set; }
+
         public virtual ICollection<ApplicationUser> OwnerFollowers { get; set; }
 
         public virtual ICollection<ApplicationUser> OwnerFollowing { get; set; }

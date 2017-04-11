@@ -61,5 +61,7 @@ namespace Tipsters.Data
                 .WithMany(x => x.LikesPronostics)
                 .Map(x => x.ToTable("LikesPronostics").MapLeftKey("UserId").MapRightKey("PronosticId"));
         }
+
+        public System.Data.Entity.DbSet<Tipsters.Models.ViewModels.UsersViewMode.UserViewModel> UserViewModels { get; set; }
     }
 }

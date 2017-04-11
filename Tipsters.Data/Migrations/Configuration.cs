@@ -29,7 +29,7 @@ namespace Tipsters.Data.Migrations
                 if (roleCreated.Succeeded)
                 {
                     var user = userManager.Users.First(x => x.Email == "krasibeck70@gmail.com");
-                    var user2 = userManager.Users.First(x => x.Email == "stanimiraalek@gmail.com");
+                    var user2 = userManager.Users.First(x => x.Email == "exeron961@gmail.com");
                     userManager.AddToRole(user.Id,"Admin");
                     userManager.AddToRole(user2.Id, "Admin");
                 }

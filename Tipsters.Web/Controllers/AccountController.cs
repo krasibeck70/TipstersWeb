@@ -167,7 +167,8 @@ namespace Tipsters.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, BirthDate = model.Birthdate, FullName = model.FullName, Image = "avatar.png"};
+                var user = new ApplicationUser
+                { UserName = model.Email, Email = model.Email, BirthDate = model.Birthdate, FullName = model.FullName, Image = "avatar.png",CreatedUser = DateTime.Today};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -387,7 +388,8 @@ namespace Tipsters.Web.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, BirthDate = model.Birthdate, FullName = info.DefaultUserName, Image = "avatar.png"};
+                var user = new ApplicationUser
+                { UserName = model.Email, Email = model.Email, BirthDate = model.Birthdate, FullName = info.DefaultUserName, Image = "avatar.png",CreatedUser = DateTime.Today};
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

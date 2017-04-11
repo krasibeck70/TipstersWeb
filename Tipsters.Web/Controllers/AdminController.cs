@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Tipsters.Data;
 using Tipsters.Data.Interfaces;
 using Tipsters.Models.BindingModels;
+using Tipsters.Models.Models;
 using Tipsters.Models.ViewModels.AdminViewModels;
 using Tipsters.Services;
 using Tipsters.Services.AdminServices;
@@ -90,6 +93,46 @@ namespace Tipsters.Web.Controllers
             return RedirectToAction("Users", "Admin");
         }
 
+        [HttpGet]
+        [Route("ViewUser/{id}")]
+        public ActionResult ViewUser(string id)
+        {
+            NavbarInfo();
+            return View(this.adminUserService.UserById(id));
+        }
+        [HttpGet]
+        [Route("AddAdminUser")]
+        public ActionResult SelectAdminUser()
+        {
+            var users = this.adminUserService.GetAllUsers();
+            return View(users);
+        }
+        [HttpPost]
+        [Route("AddAdminUser")]
+        public ActionResult AddAdminUser([Bind(Include = "Email")] string email)
+        {
+            var context = new TipstersContext();
+            var user = data.Users.Find(x => x.Email == email).First();
+            UserManagerExtensions.AddToRole(
+                new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context)), user.Id,
+                "Admin");
+            user.IsAdmin = true;
+            data.SaveChanges();
+            return RedirectToAction("SelectAdminUser", "Admin");
+        }
+
+        [HttpPost]
+        public ActionResult RemoveAdmin([Bind(Include = "Email")] string email)
+        {
+            var context = new TipstersContext();
+            var user = data.Users.Find(x => x.Email == email).First();
+            UserManagerExtensions.RemoveFromRole(
+                new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context)), user.Id,
+                "Admin");
+            user.IsAdmin = false;
+            data.SaveChanges();
+            return RedirectToAction("SelectAdminUser", "Admin");
+        }
         private void NavbarInfo()
         {
             var userId = User.Identity.GetUserId();
