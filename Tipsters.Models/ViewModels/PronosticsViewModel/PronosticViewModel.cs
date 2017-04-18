@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tipsters.Models.Models;
 
 namespace Tipsters.Models.ViewModels.PronosticsViewModel
@@ -40,8 +39,8 @@ namespace Tipsters.Models.ViewModels.PronosticsViewModel
 
         }
 
-        public virtual ICollection<Comment> OwnerComments { get; set; }
-        public virtual ICollection<ApplicationUser> UsersLikes { get; set; }
+        public Collection<Comment> OwnerComments { get; set; }
+        public Collection<ApplicationUser> UsersLikes { get; set; }
 
         public static string TimeAgo(DateTime dateTime)
         {

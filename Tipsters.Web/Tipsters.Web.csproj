@@ -339,6 +339,11 @@
     <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
     <Content Include="Views\Admin\ViewUser.cshtml" />
     <Content Include="Views\Admin\SelectAdminUser.cshtml" />
+    <Content Include="Views\Admin\ViewTip.cshtml" />
+    <Content Include="Views\Admin\EditTip.cshtml" />
+    <Content Include="Views\Admin\ViewComment.cshtml" />
+    <Content Include="Views\Admin\EditComment.cshtml" />
+    <Content Include="Views\Shared\Top10Tips_Partial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -91,7 +91,7 @@ namespace Tipsters.Web.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
 
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password,false, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password,true,shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -172,7 +172,7 @@ namespace Tipsters.Web.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    await SignInManager.SignInAsync(user, isPersistent:true, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -348,7 +348,7 @@ namespace Tipsters.Web.Controllers
 
             // Sign in the user with this external login provider if the user already has a login
             //var firstNameClaim = loginInfo.ExternalIdentity.Claims.First(c => c.Type == "urn:facebook:first_name");
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: true);
             
             switch (result)
             {
@@ -396,7 +396,7 @@ namespace Tipsters.Web.Controllers
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        await SignInManager.SignInAsync(user, isPersistent: true, rememberBrowser: false);
                         return RedirectToLocal(returnUrl);
                     }
                 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Tipsters.Models.Models;
 
 namespace Tipsters.Models.ViewModels.UsersViewMode
@@ -26,5 +27,17 @@ namespace Tipsters.Models.ViewModels.UsersViewMode
         public virtual ICollection<Comment> CommentsPronostics { get; set; }
 
         public virtual ICollection<Pronostic> LikesPronostics { get; set; }
+
+        public bool ContainsEmail(string email)
+        {
+            var emails = this.OwnerFollowers.Select(x => x.Email);
+            if (emails.Contains(email))
+            {
+                return true;
+            }
+            return false;
+        }
     }
+
+    
 }

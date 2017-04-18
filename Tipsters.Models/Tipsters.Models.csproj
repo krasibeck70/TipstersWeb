@@ -80,6 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindingModels\EditTipBindingModel.cs" />
     <Compile Include="BindingModels\EditUserBindingModel.cs" />
     <Compile Include="BindingModels\PostCommentBindingModel.cs" />
     <Compile Include="BindingModels\PostTipsBindingModel.cs" />

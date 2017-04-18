@@ -47,5 +47,30 @@ namespace Tipsters.Services
             }
             return pronosticsViewModel;
         }
+
+        public List<PronosticViewModel> Get10PronosticsSorted(string parameter)
+        {
+            List<PronosticViewModel> sortedPronostics = new List<PronosticViewModel>();
+            var pronostics = data.Pronostics.GetAll().ToList();
+            foreach (var pronostic in pronostics)
+            {
+                PronosticViewModel model = Mapper.Map<PronosticViewModel>(pronostic);
+                sortedPronostics.Add(model);
+
+            }
+            if (parameter == "Percentage")
+            {
+                return sortedPronostics.OrderByDescending(x => x.CalculatePercentage()).Take(10).ToList();
+            }
+            if (parameter == "StartMatch")
+            {
+                return sortedPronostics.OrderByDescending(x => x.StartMatch).Take(10).ToList();
+            }
+            if (parameter == "Coefficient")
+            {
+                return sortedPronostics.OrderByDescending(x => x.Koeficent).Take(10).ToList();
+            }
+            return null;
+        }
     }
 }

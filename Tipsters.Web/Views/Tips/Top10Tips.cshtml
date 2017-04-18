@@ -13,14 +13,14 @@
 }
 <div class="row">
     <div class="col-12">
-        <span class="col-1 col-lg-offset-0 btn btn-default ">Order By</span>
-        <input class="col-1 col-lg-offset-0 btn btn-default" type="submit" value="Percent" />
-        <input class="col-1 col-lg-offset-0 btn btn-default" type="submit" value="Coefficient" />
-        <input class="col-1 col-lg-offset-0 btn btn-default" type="submit" value="Start match" />
+        <span class="btn btn-default btn-orderby ">Filters</span>
+        <input class="btn btn-default btns-order btn-orderPercent hidden" type="submit" value="Percent" />
+        <input class="btn btn-default btns-order btn-orderCoefficient hidden" type="submit" value="Coefficient" />
+        <input class="btn btn-default btns-order btn-orderStartMatch hidden" type="submit" value="Start match" />
     </div>
     <br />
-    <div class="col-10 text-center">
-        @foreach (var tip in Model.OrderByDescending(x=>x.TimeElpased))
+    <div class="col-10 text-center resultSorted">
+        @foreach (var tip in Model.OrderByDescending(x => x.TimeElpased))
         {
             <div id="customJumbotron" class="jumbotron">
                 <div class="pull-left col-3 text-center">
@@ -76,10 +76,10 @@
                     </div>
                 </div>
                 <a href="javascript:void(0);" id="@tip.Id" class="pull-right btn-show" style="color: white;">Show Comments @tip.OwnerComments.Count</a>
-                <br/>
+                <br />
                 <form id="form-@tip.Id" method="post">
                     <div class="input-group">
-                        <input id="comment-@tip.Id" class="form-control" type="text" name="Comment" placeholder="Post your comment"/>
+                        <input id="comment-@tip.Id" class="form-control" type="text" name="Comment" placeholder="Post your comment" />
                         <span class="input-group-btn">
                             <button id="@tip.Id" class="btn btn-primary btn-send" type="submit">Post</button>
                         </span>
@@ -125,8 +125,7 @@
                     </div>
                 }
             </div>
-        }
+                            }
 
     </div>
 </div>
-

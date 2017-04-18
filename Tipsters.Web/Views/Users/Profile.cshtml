@@ -57,7 +57,7 @@
                         <h2>@Model.FullName</h2>
                         <ul class="unstyled">
                             <li><i class="icon-envelope"></i><strong>@Model.Email</strong> </li>
-                            <li><i class="icon-globe"></i><strong>@Model.BirthDate.Value.Day-@Model.BirthDate.Value.Month-@Model.BirthDate.Value.Year</strong> </li>
+                            <li><i class="icon-globe"></i><strong>@Model.BirthDate.ToShortDateString()</strong> </li>
                             @*@foreach (var user in Model.OwnerFollowers)
                             {
                                 <li><i class="icon-globe"></i> @user.FullName</li>

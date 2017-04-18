@@ -169,6 +169,12 @@ namespace Tipsters.Web.Controllers
              });
             return Json(comments, JsonRequestBehavior.AllowGet);
         }
+        [HttpGet]
+        [Route("GetOrderBy/{parameter}")]
+        public ActionResult GetOrderBy(string parameter)
+        {
+            return this.PartialView("Top10Tips_Partial", this.tipsService.Get10PronosticsSorted(parameter));
+        }
         private void NavbarInfo()
         {
             var userId = User.Identity.GetUserId();

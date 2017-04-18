@@ -1,6 +1,9 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Tipsters.Data;
@@ -8,6 +11,7 @@ using Tipsters.Data.Interfaces;
 using Tipsters.Models.BindingModels;
 using Tipsters.Models.Models;
 using Tipsters.Models.ViewModels.AdminViewModels;
+using Tipsters.Models.ViewModels.PronosticsViewModel;
 using Tipsters.Services;
 using Tipsters.Services.AdminServices;
 
@@ -104,6 +108,7 @@ namespace Tipsters.Web.Controllers
         [Route("AddAdminUser")]
         public ActionResult SelectAdminUser()
         {
+            NavbarInfo();
             var users = this.adminUserService.GetAllUsers();
             return View(users);
         }
@@ -111,6 +116,7 @@ namespace Tipsters.Web.Controllers
         [Route("AddAdminUser")]
         public ActionResult AddAdminUser([Bind(Include = "Email")] string email)
         {
+            NavbarInfo();
             var context = new TipstersContext();
             var user = data.Users.Find(x => x.Email == email).First();
             UserManagerExtensions.AddToRole(
@@ -124,6 +130,7 @@ namespace Tipsters.Web.Controllers
         [HttpPost]
         public ActionResult RemoveAdmin([Bind(Include = "Email")] string email)
         {
+            NavbarInfo(); 
             var context = new TipstersContext();
             var user = data.Users.Find(x => x.Email == email).First();
             UserManagerExtensions.RemoveFromRole(
@@ -131,8 +138,84 @@ namespace Tipsters.Web.Controllers
                 "Admin");
             user.IsAdmin = false;
             data.SaveChanges();
+
+            FormsAuthentication.SignOut();
+            Session.Abandon();
+
+            // clear authentication cookie
+            HttpCookie cookie1 = new HttpCookie(FormsAuthentication.FormsCookieName, "");
+            cookie1.Expires = DateTime.Now.AddYears(-1);
+            Response.Cookies.Add(cookie1);
+
+            // clear session cookie (not necessary for your current problem but i would recommend you do it anyway)
+            HttpCookie cookie2 = new HttpCookie("ASP.NET_SessionId", "");
+            cookie2.Expires = DateTime.Now.AddYears(-1);
+            Response.Cookies.Add(cookie2);
+
+            FormsAuthentication.RedirectToLoginPage();
+
             return RedirectToAction("SelectAdminUser", "Admin");
         }
+        [HttpGet]
+        [Route("RemoveTip/{id}")]
+        public ActionResult RemoveTip(string id)
+        {
+            NavbarInfo();
+            this.adminTipsService.RemoveTips(id);
+            return RedirectToAction("Tips", "Admin");
+        }
+        [HttpGet]
+        [Route("ViewTip/{id}")]
+        public ActionResult ViewTip(string id)
+        {
+            NavbarInfo();
+            return View(this.adminTipsService.TipByIdViewModel(id));
+        }
+        [HttpGet]
+        [Route("EditTip/{id}")]
+        public ActionResult EditTip(string id)
+        {
+            NavbarInfo();
+            return View(this.adminTipsService.TipByIdViewModel(id));
+        }
+        [HttpPost]
+        [Route("EditTipSave/{id}")]
+        public ActionResult EditTipSave(string id,EditTipBindingModel etbm)
+        {
+            NavbarInfo();
+            this.adminTipsService.EditTip(id,etbm);
+            return RedirectToAction("Tips", "Admin");
+        }
+        [HttpGet]
+        [Route("RemoveComment/{id}")]
+        public ActionResult RemoveComment(string id)
+        {
+            NavbarInfo();
+            this.adminCommentService.RemoveComment(id);
+            return RedirectToAction("Comments", "Admin");
+        }
+        [HttpGet]
+        [Route("ViewComment/{id}")]
+        public ActionResult ViewComment(string id)
+        {
+            NavbarInfo();
+            return View(this.adminCommentService.CommentsById(id));
+        }
+        [HttpGet]
+        [Route("EditComment/{id}")]
+        public ActionResult EditComment(string id)
+        {
+            NavbarInfo();
+            return View(this.adminCommentService.CommentsById(id));
+        }
+        [HttpPost]
+        [Route("EditComment/{id}")]
+        public ActionResult EditComment(string id, PostCommentBindingModel pcbm)
+        {
+            this.adminCommentService.EditComment(id,pcbm);
+            return RedirectToAction("Comments", "Admin");
+        }
+
         private void NavbarInfo()
         {
             var userId = User.Identity.GetUserId();

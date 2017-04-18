@@ -53,8 +53,7 @@
                                 </div>
                                 @if (Request.IsAuthenticated)
                                 {
-                                    ApplicationUser userModel = Mapper.Map<ApplicationUser>(user);
-                                    if (userLog.OwnerFollowers.Contains(userModel))
+                                    if (userLog.ContainsEmail(user.Email))
                                     {
                                         <div class="col-md-6">
                                             <button type="submit" data-follow="@user.Id" class="btn btn-default btn-sm btn-block btn-follow" style="font-weight: bold">Followed</button>
