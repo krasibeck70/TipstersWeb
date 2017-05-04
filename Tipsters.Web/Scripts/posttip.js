@@ -16,6 +16,7 @@ function AwayTeam() {
         document.getElementById("selectAwayTeam").selectedIndex = 0;
     }
 }
+//$(document).ready(function () { alert(); }); 
 
 $(function () {
     $("#datetimepicker").on("change", function () {

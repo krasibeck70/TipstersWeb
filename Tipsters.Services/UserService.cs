@@ -61,5 +61,15 @@ namespace Tipsters.Services
             }
             return userViewModel;
         }
+
+        public ApplicationUser FindUser(string id)
+        {
+            return this.data.Users.Find(x => x.Id == id).FirstOrDefault();
+        }
+
+        public ICollection<ApplicationUser> AllUsers()
+        {
+            return this.data.Users.GetAll().ToList();
+        }
     }
 }

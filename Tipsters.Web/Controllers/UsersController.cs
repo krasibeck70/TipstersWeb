@@ -49,14 +49,14 @@ namespace Tipsters.Web.Controllers
             var user = new ApplicationUser();
             if (id != null)
             {
-                user = this.data.Users.Find(x => x.Id == id).First();
+                user = this.userService.FindUser(id);
                 UserViewModel userModel = Mapper.Map<UserViewModel>(user);
                 return View(userModel);
             }
             else
             {
                 var userId = User.Identity.GetUserId();
-                user = this.data.Users.Find(x => x.Id == userId).FirstOrDefault();
+                user = this.userService.FindUser(userId);
                 if (user == null)
                 {
                     return RedirectToAction("Index", "Home");
@@ -98,7 +98,7 @@ namespace Tipsters.Web.Controllers
         public JsonResult AllEmails()
         {
             NavbarInfo();
-            var users = this.data.Users.GetAll();
+            var users = this.userService.AllUsers();
             var emails = users.Select(x => x.Email);
             return Json(emails, JsonRequestBehavior.AllowGet);
         }
@@ -106,7 +106,7 @@ namespace Tipsters.Web.Controllers
         public ActionResult FindUserById(string id)
         {
             NavbarInfo();
-            var user = this.data.Users.Find(x => x.Id == id).First();
+            var user = this.userService.FindUser(id);
             var currentUser = new
             {
                 Email = user.Email,
@@ -119,7 +119,7 @@ namespace Tipsters.Web.Controllers
         private void NavbarInfo()
         {
             var userId = User.Identity.GetUserId();
-            var user = data.Users.Find(x => x.Id == userId).FirstOrDefault();
+            var user = this.userService.FindUser(userId);
             ViewBag.Image = user != null ? user.Image : null;
             ViewBag.FullName = user != null ? user.FullName : null;
         }

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using Tipsters.Data;
@@ -29,16 +32,25 @@ namespace Tipsters.Web.Controllers
             this.tipsService = new TipsService(data);
         }
         [HttpGet]
-        [Route("PostTips")]
-        public ActionResult PostTips()
+        [Route("PostTips/{message?}")]
+        public ActionResult PostTips(string message)
         {
             NavbarInfo();
             if (Request.IsAuthenticated)
             {
-                var tip = this.data.Tips.GetAll().ToList();
-                var countries = this.data.Countries.GetAll().ToList();
-                Tuple<IEnumerable<County>, IEnumerable<Tip>> items = new Tuple<IEnumerable<County>, IEnumerable<Tip>>(countries, tip);
-                return View(items);
+                var tip = this.tipsService.GetAllTypeOfTips();
+                var countries = this.tipsService.GetAllCountries();
+                if (message != null)
+                {
+                    var errors = message.Split(',').ToList();
+                    Tuple<IEnumerable<County>, IEnumerable<Tip>, IEnumerable<string>> items = new Tuple<IEnumerable<County>, IEnumerable<Tip>, IEnumerable<string>>(countries, tip, errors);
+                    return View(items);
+                }
+                else
+                {
+                    Tuple<IEnumerable<County>, IEnumerable<Tip>,IEnumerable<string>> items = new Tuple<IEnumerable<County>, IEnumerable<Tip>,IEnumerable<string>>(countries, tip,new List<string>());
+                    return View(items);
+                }
             }
             return RedirectToAction("Login", "Account");
 
@@ -50,12 +62,20 @@ namespace Tipsters.Web.Controllers
             NavbarInfo();
             if (Request.IsAuthenticated)
             {
-                if (ModelState.IsValid)
+                var errors = this.tipsService.Errors(ptbm);
+                if (!errors.Any())
                 {
                     var userId = User.Identity.GetUserId();
                     this.tipsService.PostTips(ptbm, userId);
                     return RedirectToAction("Profile", "Users", new { id = userId });
                 }
+                StringBuilder errorsBuilder = new StringBuilder();
+                foreach (string error in errors)
+                {
+                    errorsBuilder.Append(error);
+                    errorsBuilder.Append(",");
+                }
+                return RedirectToAction("PostTips", "Tips", new {message = errorsBuilder.ToString() });
             }
             return RedirectToAction("Login", "Account");
 
@@ -76,8 +96,8 @@ namespace Tipsters.Web.Controllers
                     return null;
                 }
                 var userId = User.Identity.GetUserId();
-                var user = this.data.Users.Find(x => x.Id == userId).First();
-                var pronostic = this.data.Pronostics.Find(x => x.Id == newId).First();
+                var user = this.userService.FindUser(userId);
+                var pronostic = this.tipsService.FindPronosticById(newId);
                 if (user.LikesPronostics.Contains(pronostic))
                 {
                     return null;
@@ -86,7 +106,7 @@ namespace Tipsters.Web.Controllers
                 if (parameter =="Up")
                 {
                     pronostic.VotesUp++;
-                    this.data.SaveChanges();
+                    this.tipsService.SaveChanges();
                     var votes = new
                     {
                         VotesUp_json = pronostic.VotesUp,
@@ -98,7 +118,7 @@ namespace Tipsters.Web.Controllers
                 else
                 {
                     pronostic.VotesDown++;
-                    this.data.SaveChanges();
+                    this.tipsService.SaveChanges();
                     var votes = new
                     {
                         VotesDown_json = pronostic.VotesDown,
@@ -125,11 +145,11 @@ namespace Tipsters.Web.Controllers
             if (Request.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
-                var user = this.data.Users.Find(x => x.Id == userId).First();
+                var user = this.userService.FindUser(userId);
                 Guid g = Guid.NewGuid();
                 string GuidString = Convert.ToBase64String(g.ToByteArray());
                 GuidString = GuidString.Replace("=", "");
-                var pronostic = this.data.Pronostics.Find(x => x.Id == id).First();
+                var pronostic = this.tipsService.FindPronosticById(id);
                 Comment comment = new Comment
                 {
                     Id = g.ToString(),
@@ -140,9 +160,9 @@ namespace Tipsters.Web.Controllers
                     User = user,
                     TimePosted = DateTime.Now
                 };
-                this.data.Comments.InsertOrUpdate(comment);
-                this.data.SaveChanges();
-                var resultPronostic = this.data.Pronostics.Find(x => x.Id == pronostic.Id).First();
+                this.tipsService.InsertOrUpdate(comment);
+                this.tipsService.SaveChanges();
+                var resultPronostic = this.tipsService.FindPronosticById(pronostic.Id);
                 var coment = new
                 {
                     Id = comment.Id,
@@ -162,7 +182,7 @@ namespace Tipsters.Web.Controllers
         public ActionResult GetAllCommentsForThisTip(string id)
         {
             NavbarInfo();
-            var pronostic = this.data.Pronostics.Find(x => x.Id == id).First();
+            var pronostic = this.tipsService.FindPronosticById(id);
             var comments = pronostic.OwnerComments.Select(x => new
             {
                 comment = x.Message,
@@ -181,7 +201,7 @@ namespace Tipsters.Web.Controllers
         private void NavbarInfo()
         {
             var userId = User.Identity.GetUserId();
-            var user = data.Users.Find(x => x.Id == userId).FirstOrDefault();
+            var user = this.userService.FindUser(userId);
             ViewBag.Image = user != null ? user.Image : null;
             ViewBag.FullName = user != null ? user.FullName : null;
         }

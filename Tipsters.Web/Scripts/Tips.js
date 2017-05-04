@@ -1,4 +1,12 @@
-﻿
+﻿$(document).ready(function getLocation() {
+    
+});
+
+function showPosition(position) {
+        x.innerHTML = "Latitude: " + position.coords.latitude +
+        "<br>Longitude: " + position.coords.longitude;
+    }
+
 $('.btn-vote').click(function () {
     var tip_id = $(this).data("tip");
     var tip_id_button = "";

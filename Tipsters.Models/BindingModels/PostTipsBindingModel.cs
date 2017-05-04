@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tipsters.Models.BindingModels
 {
     public class PostTipsBindingModel
     {
+        
         public string SelectHomeTeam { get; set; }
         public string SelectAwayTeam { get; set; }
     

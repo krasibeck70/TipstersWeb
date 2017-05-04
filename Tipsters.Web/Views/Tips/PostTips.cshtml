@@ -1,13 +1,15 @@
 ﻿@using System.Threading
-@model Tuple<IEnumerable<Tipsters.Models.Models.County>, IEnumerable<Tipsters.Models.Models.Tip>>
+@model Tuple<IEnumerable<Tipsters.Models.Models.County>, IEnumerable<Tipsters.Models.Models.Tip>,IEnumerable<string>>
 @section Scripts
 {
+    
     <script src="~/Scripts/posttip.js"></script>
     <script>
         $("#datetimepicker").datetimepicker({
             format: "yyyy-mm-dd hh:ii:00"
         });
     </script>
+    
 }
 
 @section Styles{
@@ -19,6 +21,7 @@
 @{
     ViewBag.Title = "PostTips";
 }
+
 
 <div id="wrapper">
 
@@ -34,6 +37,10 @@
                                     <h1 class="display-2">Post Tips</h1>
                                 </div>
                                 <br />
+                                @foreach (var error in Model.Item3)
+                                {
+                                    <h3 class="text-danger text-center">@error</h3>
+                                }
                                 <div class="col-lg-5 col-md-5 col-xs-6">
                                     <select name="SelectHomeTeam" id="selectLocalTeam" class="form-control selectpicker " onchange="LocalTeam()" data-style="btn-info" data-live-search="true">
                                         <option>Home Team</option>

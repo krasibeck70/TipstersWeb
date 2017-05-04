@@ -32,18 +32,5 @@ namespace Tipsters.Web.Controllers
             ViewBag.FullName = user != null ? user.FullName : null;
             return View(this.tipsService.GetAllPronosticViewModels());
         }
-
-        public ActionResult Demo()
-        {
-
-
-            var user = this.data.Users.GetAll().First(x=>x.Id == "a257e9d0-f589-4db5-945b-d1659b88d979");
-            if (user == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            UserViewModel userModel = Mapper.Map<UserViewModel>(user);
-            return View(userModel);
-        }
     }
 }

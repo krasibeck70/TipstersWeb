@@ -72,5 +72,62 @@ namespace Tipsters.Services
             }
             return null;
         }
+
+        public List<string> Errors(PostTipsBindingModel ptbm)
+        {
+            var countries = data.Countries.GetAll().Select(x=>x.Name);
+            var errors = new List<string>();
+            if (ptbm.SelectHomeTeam.Equals(ptbm.SelectAwayTeam))
+            {
+                errors.Add("A team can't play against itself! Please change team!");
+            }
+            if (ptbm.SelectHomeTeam.Equals("Home Team") || ptbm.SelectAwayTeam.Equals("Away Team") || 
+                countries.Contains(ptbm.SelectHomeTeam) || countries.Contains(ptbm.SelectAwayTeam))
+            {
+                errors.Add("Invalid Team");
+            }
+            if (ptbm.SelectTips.Equals("Type Of Tip"))
+            {
+                errors.Add("Invalid type of tip");
+            }
+            if (ptbm.StartMatch < DateTime.Now)
+            {
+                errors.Add("Invalid Date");
+            }
+            if (ptbm.Koeficent is decimal)
+            {
+                
+            }
+            else
+            {
+                errors.Add("Is Not a decimal");
+            }
+
+            return errors;
+        }
+
+        public ICollection<Tip> GetAllTypeOfTips()
+        {
+            return this.data.Tips.GetAll().ToList();
+        }
+        public ICollection<County> GetAllCountries()
+        {
+            return this.data.Countries.GetAll().ToList();
+        }
+
+        public Pronostic FindPronosticById(string id)
+        {
+            return this.data.Pronostics.FindByPredicate(x => x.Id == id);
+        }
+
+        public void SaveChanges()
+        {
+            this.data.SaveChanges();
+        }
+
+        public void InsertOrUpdate(Comment comment)
+        {
+            this.data.Comments.InsertOrUpdate(comment);
+        }
     }
 }
