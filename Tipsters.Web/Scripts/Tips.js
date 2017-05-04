@@ -94,6 +94,7 @@ $(".btn-send").click(function () {
 });
 
 $(".btn-orderby").click(function () {
+
     if ($(".btns-order").hasClass("hidden")) {
         $(".btns-order").removeClass("hidden");
     } else {
@@ -102,6 +103,7 @@ $(".btn-orderby").click(function () {
 });
 $(".btn-orderPercent").click(function () {
     $(".resultSorted").load("/Tips/GetOrderBy/Percentage");
+
 });
 $(".btn-orderCoefficient").click(function () {
     $(".resultSorted").load("/Tips/GetOrderBy/Coefficient");

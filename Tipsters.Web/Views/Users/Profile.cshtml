@@ -3,8 +3,9 @@
 @**@
 
 @section Styles{
+<link href=@Url.Content("~/Content/tips.css") rel="stylesheet" />
     <link href=@Url.Content("~/Content/Profile.css") rel="stylesheet" />
-    <link href=@Url.Content("~/Content/tips.css") rel="stylesheet" />
+    
 }
 @section scripts
 {
@@ -15,197 +16,193 @@
             $("#files").click();
         }
     </script>
-
 }
 @{
     ViewBag.Title = "Profile";
 }
 
-<div class="container profile">
-    <div class="row">
-        <div class="span12 text-center">
-            <div class="well well-small clearfix">
-                <div class="row-fluid">
-                    <div class="span2">
-                        @if (string.IsNullOrEmpty(Model.Image))
-                        {
-                            <img src="~/Content/Images/avatar.png" class="img-polaroid" />
-                        }
-                        else
-                        {
+<div class="container">
+    <div class="container profile">
+        <div class="row">
+            <div class="span12 text-center">
+                @if (User.Identity.GetUserId() == Model.Id)
+            {
+                    <input type="button" class="btn btn-info form-control pull-right" value="Settings" />
+                }
+                <div class="well well-small clearfix">
+                    <div class="row-fluid">
+                        <div class="span2">
                             <img src="~/Content/Images/@Model.Image" class="img-polaroid" />
-                        }
-                        
-                        <br/>
-                        <br/>
-                        <div>
-                            @if (User.Identity.GetUserId() == Model.Id)
-                            {
-                                using (Html.BeginForm("Profile", "Users", FormMethod.Post, new {enctype = "multipart/form-data"}))
+                            <br />
+                            <br />
+                            <div>
+                                @if (User.Identity.GetUserId() == Model.Id)
                                 {
-                                    <div style="height: 0px; overflow: hidden">
-                                        <input type="file" id="files" name="file" onchange="this.form.submit()"/>
-                                    </div>
-                                    <div>
-                                        <input type="button" OnClick="chooseFile();" class="btn btn-primary" value="Select Image"/>
-                                    </div>
+                                    using (Html.BeginForm("Profile", "Users", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                    {
+                                        <div style="height: 0px; overflow: hidden">
+                                            <input type="file" id="files" name="file" onchange="this.form.submit()" />
+                                        </div>
+                                        <div>
+                                            <input type="button" OnClick="chooseFile();" class="btn btn-primary" value="Select Image" />
+                                        </div>
+                                    }
                                 }
-                            }
+                            </div>
                         </div>
-                    </div>
-                    <div class="span4">
-                        <h2>@Model.FullName</h2>
-                        <ul class="unstyled">
-                            <li><i class="icon-envelope"></i><strong>@Model.Email</strong> </li>
-                            <li><i class="icon-globe"></i><strong>@Model.BirthDate.ToShortDateString()</strong> </li>
-                            @*@foreach (var user in Model.OwnerFollowers)
-                            {
-                                <li><i class="icon-globe"></i> @user.FullName</li>
-                            }*@
-                        </ul>
-                    </div>
-                    <div class="span6">
-                        <ul class="inline stats">
-                            <li>
-                                <span style="color: black">@Model.OwnerPronostics.Count</span>
-                                Tips
-                            </li>
-                            <li>
-                                <span style="color: black">@Model.OwnerFollowers.Count</span>
-                                Followers
-                            </li>
+                        <div class="span4">
+                            <h2>@Model.FullName</h2>
+                            <ul class="unstyled">
+                                <li><i class="icon-envelope"></i><strong>@Model.Email</strong> </li>
+                                <li><i class="icon-globe"></i><strong>@Model.BirthDate.ToShortDateString()</strong> </li>
+                            </ul>
+                        </div>
+                        <div class="span6">
+                            <ul class="inline stats">
+                                <li>
+                                    <span style="color: black">@Model.OwnerPronostics.Count</span>
+                                    Tips
+                                </li>
+                                <li>
+                                    <span style="color: black">@Model.OwnerFollowers.Count</span>
+                                    Followers
+                                </li>
 
-                            <li>
-                                <span style="color: black">@Model.OwnerFollowing.Count</span>
-                                Followed
-                            </li>
-                        </ul>
-                        <div>
-                            <!--/span6-->
-                        </div><!--/row-->
+                                <li>
+                                    <span style="color: black">@Model.OwnerFollowing.Count</span>
+                                    Followed
+                                </li>
+                            </ul>
+                            <div>
+                                <!--/span6-->
+                            </div><!--/row-->
+                        </div>
+                        <!--Body content-->
                     </div>
-                    <!--Body content-->
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-10 text-center">
-                    @foreach (var tip in Model.OwnerPronostics.OrderByDescending(x=>x.TimeElpased))
-                    {
-                        string userId = @User.Identity.GetUserId();
-                        <div id="customJumbotron" class="jumbotron">
-                            <div class="pull-left col-3 text-center">
-                                <a href="@Url.Action("Profile", "Users", new {id = tip.User.Id})"><button class="btn btn-success"><strong>@tip.User.UserName</strong></button></a>
-                            </div>
-                            <div class="pull-right col-3 text-center">
-                                <span id="TimeElapsed" class="btn btn-warning"><strong>@tip.TimeAgoPronostic</strong></span>
-                            </div>
-                            <div class="col-4 col-lg-offset-1 text-center">
-                                <span class="btn btn-primary"><strong>@tip.LocalTeam vs @tip.AwayTeam</strong></span>
-                            </div>
-                            <div class="jumbotron">
-                                <div class="col-3 pull-left">
-                                    <span><strong>Type Of Tip:</strong></span>
-                                    <span class="btn btn-info">@tip.TypeOfPrognise</span>
+
+
+                <div class="row">
+                    <div class="text-center">
+                        @foreach (var tip in Model.OwnerPronostics.OrderByDescending(x => x.TimeElpased))
+            {
+                string userId = @User.Identity.GetUserId();
+                            <div id="customJumbotron" class="jumbotron">
+                                <div class="pull-left text-center email-custom">
+                                    <a href="@Url.Action("Profile", "Users", new {id = tip.User.Id})"><button class="btn btn-success"><strong>@tip.User.UserName</strong></button></a>
                                 </div>
-                                <div class="col-3 pull-right">
-                                    <span><strong>Start Match:</strong></span>
-                                    @{
-                                        if (tip.StartMatch.Day == DateTime.Now.Day && tip.StartMatch.Month == DateTime.Now.Month)
-                                        {
-                                            <span class="btn btn-info">Today @tip.StartMatch.ToString($"HH:mm:ss")</span>
+
+                                <div class="pull-right text-center time-custom">
+                                    <span id="TimeElapsed" class="btn btn-warning"><strong>@tip.TimeAgoPronostic</strong></span>
+                                </div>
+
+                                <div class="match-custom">
+                                    <span class="btn btn-primary"><strong>@tip.LocalTeam vs @tip.AwayTeam</strong></span>
+                                </div>
+                                <div class="jumbotron">
+                                    <div class="typeOfTip-custom">
+                                        <span><strong>Type Of Tip:</strong></span>
+                                        <span class="btn btn-info">@tip.TypeOfPrognise</span>
+                                    </div>
+                                    <div class="startMatch-custom">
+                                        <span><strong>Start Match:</strong></span>
+                                        @{
+                                            if (tip.StartMatch.Day == DateTime.Now.Day && tip.StartMatch.Month == DateTime.Now.Month)
+                                            {
+                                                <span class="btn btn-info">Today @tip.StartMatch.ToString($"HH:mm:ss")</span>
+                                            }
+                                            else if (tip.StartMatch.Day == DateTime.Now.Day + 1)
+                                            {
+                                                <span class="btn btn-info">Tomorrow @tip.StartMatch.ToString($"HH:mm:ss")</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="btn btn-info">@tip.StartMatch.ToString($"dd-MM-yyyy HH:mm:ss")</span>
+                                            }
                                         }
-                                        else if (tip.StartMatch.Day == DateTime.Now.Day + 1)
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div class="odds-custom">
+                                        <span><strong>Odds:</strong></span>
+                                        <span class="btn btn-info">@tip.Koeficent</span>
+                                    </div>
+
+                                    <div class="votes-custom">
+                                        @if (tip.ContainsUserId(tip.UsersLikes, userId))
                                         {
-                                            <span class="btn btn-info">Tomorrow @tip.StartMatch.ToString($"HH:mm:ss")</span>
+                                            <button class="btn btn-success glyphicon glyphicon-thumbs-up disabled">&nbsp; @tip.VotesUp</button>
+                                            <button class="btn btn-success glyphicon glyphicon-thumbs-down disabled">&nbsp; @tip.VotesDown</button>
                                         }
                                         else
                                         {
-                                            <span class="btn btn-info">@tip.StartMatch.ToString($"dd-MM-yyyy HH:mm:ss")</span>
+                                            <button type="button" id="button_up_ajax-@tip.Id" data-val="@tip.VotesUp" data-tip="@tip.Id" class="btn btn-success glyphicon glyphicon-thumbs-up Up btn-vote">&nbsp; @tip.VotesUp</button>
+                                            <button type="button" id="button_down_ajax-@tip.Id" data-val2="@tip.VotesDown" data-tip="@tip.Id" class="btn btn-success glyphicon glyphicon-thumbs-down Down btn-vote">&nbsp; @tip.VotesDown</button>
                                         }
-                                    }
-                                </div>
-                                <br>
-                                <br>
-                                <div class="col-3 pull-left">
-                                    <span><strong>Odds:</strong></span>
-                                    <span class="btn btn-info">@tip.Koeficent</span>
-                                </div>
+                                    </div>
 
-                                <div class="col-3 pull-right">
-                                    @if (tip.ContainsUserId(tip.UsersLikes, userId))
-                                    {
-                                        <button class="btn btn-success glyphicon glyphicon-thumbs-up disabled">&nbsp; @tip.VotesUp</button>
-                                        <button class="btn btn-success glyphicon glyphicon-thumbs-down disabled">&nbsp; @tip.VotesDown</button>
-                                    }
-                                    else
-                                    {
-                                        <button type="button" id="button_up_ajax-@tip.Id" data-val="@tip.VotesUp" data-tip="@tip.Id" class="btn btn-success glyphicon glyphicon-thumbs-up Up btn-vote">&nbsp; @tip.VotesUp</button>
-                                        <button type="button" id="button_down_ajax-@tip.Id" data-val2="@tip.VotesDown" data-tip="@tip.Id" class="btn btn-success glyphicon glyphicon-thumbs-down Down btn-vote">&nbsp; @tip.VotesDown</button>
-                                    }
-                                </div>
-                                <br>
-                                <br>
-                                <br>
-                                <div class="col-12">
-                                    <div class="progress">
-                                        <div id="progress_bar_@tip.Id" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="@tip.PercentageWin" aria-valuemin="0" aria-valuemax="100" style="width: @tip.PercentageWin%">@tip.PercentageWin%</div>
+                                    <div class="progress-custom">
+                                        <div class="progress">
+                                            <div id="progress_bar_@tip.Id" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="@tip.PercentageWin" aria-valuemin="0" aria-valuemax="100" style="width: @tip.PercentageWin%">@tip.PercentageWin%</div>
+                                        </div>
                                     </div>
                                 </div>
+                                <a href="javascript:void(0);" id="@tip.Id" class="pull-right btn-show" style="color: white;">Show Comments @tip.OwnerComments.Count</a>
+                                <br />
+                                <form id="form-@tip.Id" method="post">
+                                    <div class="input-group">
+                                        <input id="comment-@tip.Id" class="form-control input-custom1" type="text" name="Comment" placeholder="Post your comment" />
+                                        <span class="input-group-btn">
+                                            <button id="@tip.Id" class="btn btn-primary btn-send" type="submit">Post</button>
+                                        </span>
+                                    </div>
+                                </form>
                             </div>
-                            <a href="javascript:void(0);" id="@tip.Id" class="pull-right btn-show" style="color: white;">Show Comments @tip.OwnerComments.Count</a>
-                            <br/>
-                            <form id="form-@tip.Id" method="post">
-                                <div class="input-group">
-                                    <input id="comment-@tip.Id" class="form-control" type="text" name="Comment" placeholder="Post your comment" style="height: 0.31in;"/>
-                                    <span class="input-group-btn">
-                                        <button id="@tip.Id" class="btn btn-primary btn-send" type="submit">Post</button>
-                                    </span>
-                                </div>
-                            </form>
-                        </div>
-                        <div id="comments-@tip.Id" class="hidden">
-                            <div id="Last_Comment-@tip.Id" class="row hidden">
-                                <div class="col-sm-1">
-                                    <div class="thumbnail">
-                                        <img id="Image_ajax-@tip.Id" class="img-responsive user-photo" src="">
-                                    </div><!-- /thumbnail -->
-                                </div><!-- /col-sm-1 -->
-                                <div class="col-sm-11">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <strong id="Email_ajax-@tip.Id"></strong> <span id="TimePosted_ajax-@tip.Id" class="text-muted pull-right"></span>
-                                        </div>
-                                        <div class="panel-body">
-                                            <p id="Message_ajax-@tip.Id" class="pull-left"></p>
-                                        </div><!-- /panel-body -->
-                                    </div><!-- /panel panel-default -->
-                                </div><!-- /col-sm-5 -->
-                            </div>
-                            @foreach (var comment in tip.OwnerComments.OrderByDescending(x => x.TimePosted))
-                            {
-                                <div class="row">
+                            <div id="comments-@tip.Id" class="hidden">
+                                <div id="Last_Comment-@tip.Id" class="row hidden">
                                     <div class="col-sm-1">
                                         <div class="thumbnail">
-                                            <img class="img-responsive user-photo" src="~/Content/Images/@comment.User.Image">
+                                            <img id="Image_ajax-@tip.Id" class="img-responsive user-photo" src="">
                                         </div><!-- /thumbnail -->
                                     </div><!-- /col-sm-1 -->
                                     <div class="col-sm-11">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
-                                                <strong>@comment.User.Email</strong> <span class="text-muted pull-right">commented @comment.TimePostedComment</span>
+                                                <strong id="Email_ajax-@tip.Id"></strong> <span id="TimePosted_ajax-@tip.Id" class="text-muted pull-right"></span>
                                             </div>
                                             <div class="panel-body">
-                                                <p class="pull-left">@comment.Message</p>
+                                                <p id="Message_ajax-@tip.Id" class="pull-left"></p>
                                             </div><!-- /panel-body -->
                                         </div><!-- /panel panel-default -->
                                     </div><!-- /col-sm-5 -->
                                 </div>
-                            }
-                        </div>
-                    }
+                                @foreach (var comment in tip.OwnerComments.OrderByDescending(x => x.TimePosted))
+                                {
+                                    <div class="row">
+                                        <div class="col-sm-1">
+                                            <div class="thumbnail">
+                                                <img class="img-responsive user-photo" src="~/Content/Images/@comment.User.Image">
+                                            </div><!-- /thumbnail -->
+                                        </div><!-- /col-sm-1 -->
+                                        <div class="col-sm-11">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <strong>@comment.User.Email</strong> <span class="text-muted pull-right">commented @comment.TimePostedComment</span>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <p class="pull-left">@comment.Message</p>
+                                                </div><!-- /panel-body -->
+                                            </div><!-- /panel panel-default -->
+                                        </div><!-- /col-sm-5 -->
+                                    </div>
+                                }
+                            </div>
+                                            }
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

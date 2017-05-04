@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Tipsters.Data;
 using Tipsters.Data.Interfaces;
+using Tipsters.Models.ViewModels.UsersViewMode;
 using Tipsters.Services;
 
 namespace Tipsters.Web.Controllers
@@ -33,7 +35,15 @@ namespace Tipsters.Web.Controllers
 
         public ActionResult Demo()
         {
-            return View();
+
+
+            var user = this.data.Users.GetAll().First(x=>x.Id == "a257e9d0-f589-4db5-945b-d1659b88d979");
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            UserViewModel userModel = Mapper.Map<UserViewModel>(user);
+            return View(userModel);
         }
     }
 }

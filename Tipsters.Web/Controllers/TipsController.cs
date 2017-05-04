@@ -50,9 +50,12 @@ namespace Tipsters.Web.Controllers
             NavbarInfo();
             if (Request.IsAuthenticated)
             {
-                var userId = User.Identity.GetUserId();
-                this.tipsService.PostTips(ptbm,userId);
-                return RedirectToAction("Profile", "Users", new { id = userId });
+                if (ModelState.IsValid)
+                {
+                    var userId = User.Identity.GetUserId();
+                    this.tipsService.PostTips(ptbm, userId);
+                    return RedirectToAction("Profile", "Users", new { id = userId });
+                }
             }
             return RedirectToAction("Login", "Account");
 

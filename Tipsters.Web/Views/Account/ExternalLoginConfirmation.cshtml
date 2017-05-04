@@ -26,7 +26,7 @@
         <div class="form-group">
             <div class="input-group">
                 @Html.LabelFor(m => m.Email, new { @class = "sr-only" })
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", id = "Email_js" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", id = "Email_js", value = Model.Email })
                 <span class="input-group-addon ">
                     <span class="glyphicon glyphicon-ok" id="message3"></span>
                 </span>

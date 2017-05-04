@@ -1,12 +1,13 @@
-﻿#wrapper {
+﻿/*#wrapper {
     height: auto;
     width: 1200px;
     margin: 0 auto; 
-}
+}*/
 .jumbotron {
-    margin-left: 18%;
-    margin-right: 18%;
-    height: 5in;
+    /*margin-left: 1%;
+    margin-right: 1%;*/
+    /*height: 5in;*/
+
     background-color: beige;
 }
 
